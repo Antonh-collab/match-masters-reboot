@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Match Masters Reboot</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Inter+Tight:wght@500..900&display=swap" rel="stylesheet">
+<style>
+/* Layout: fixed 1440×810 stage scaled to the window, one slide at a time — matches the 24Play partner deck */
+:root{
+  --ground:#05070a; --bg:#0d1117; --panel:#161d22; --line:#2a343a;
+  --ink:#f5f7f1; --mut:#aebdb8; --dim:#82918c;
+  --lime:#caff6a; --orange:#ff987c; --purple:#a8a0ff; --teal:#7ce0d7;
+  --display:"Inter Tight","Inter",Arial,sans-serif; --body:"Inter","Segoe UI",Arial,sans-serif;
+  color-scheme:dark; --s:1;
+}
+html,body{height:100%}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);overflow:hidden;padding-left:max(0px,env(safe-area-inset-left,0px));padding-right:max(0px,env(safe-area-inset-right,0px))}
+*{box-sizing:border-box}h1,h2,h3,p{margin:0}button{font:inherit;cursor:pointer}
+#stage{position:absolute;width:1440px;height:810px;top:50%;left:50%;transform:translate(-50%,-50%) scale(var(--s));overflow:hidden;background:var(--bg);border:1px solid #283039;box-shadow:0 22px 110px #000b}
+.slide{display:none;position:absolute;inset:0;padding:96px 80px 72px;background:radial-gradient(ellipse at 100% 0%,rgba(106,137,138,.12),transparent 55%),var(--bg)}
+.slide.active{display:flex;flex-direction:column;gap:22px;animation:in .35s ease}
+@keyframes in{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.slide.active{animation:none}}
+.slide::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;background-image:radial-gradient(#ffffff22 .8px,transparent .8px);background-size:26px 26px;-webkit-mask-image:linear-gradient(100deg,transparent 5%,#000 100%);mask-image:linear-gradient(100deg,transparent 5%,#000 100%)}
+.slide>*{position:relative}
+.top{position:absolute;z-index:5;left:80px;right:80px;top:34px;display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#95a09f}
+.brand{font-family:var(--display);font-size:20px;font-weight:900;letter-spacing:-.04em;color:var(--lime);text-transform:none}.brand b{color:var(--ink)}
+.foot{position:absolute;z-index:5;left:80px;right:80px;bottom:22px;display:flex;align-items:center;gap:14px}
+.bar{flex:1;height:2px;background:#3b4949;border-radius:2px;overflow:hidden}.bar i{display:block;height:100%;background:var(--lime);width:0;transition:width .3s}
+.num{font-size:12px;letter-spacing:.14em;color:#b8c5c0;min-width:64px;font-variant-numeric:tabular-nums}
+.nav{border:1px solid #52615f;background:#ffffff08;color:#d7ddd8;width:32px;height:28px;border-radius:5px}.nav:hover,.nav:focus-visible{border-color:var(--lime);outline:none;background:#ffffff18}
+.kick{font-size:13px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+h1{font-family:var(--display);font-size:118px;font-weight:850;letter-spacing:-.065em;line-height:.95;text-wrap:balance}
+h2{font-family:var(--display);font-size:62px;font-weight:850;letter-spacing:-.055em;line-height:1.04;text-wrap:balance;max-width:1180px}
+h3{font-family:var(--display);font-size:27px;font-weight:800;letter-spacing:-.03em;line-height:1.1}
+.lead{font-size:23px;line-height:1.42;color:var(--mut);max-width:880px}
+.acc{color:var(--lime)}
+.grow{flex:1}
+.row{display:flex;gap:20px}.row>*{flex:1;min-width:0}
+.card{background:linear-gradient(135deg,#1b2228,#141a1f);border:1px solid var(--line);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:12px}
+.card p{font-size:17px;line-height:1.45;color:var(--mut)}
+.tag{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.pill{display:inline-block;align-self:flex-start;border-radius:100px;padding:6px 13px;font-size:12px;font-weight:800;letter-spacing:.06em}
+.pill.you{background:#ff987c18;border:1px solid #bc755d;color:#ffac98}.pill.we{background:#caff6a18;border:1px solid #6f8f3d;color:var(--lime)}
+.big{font-family:var(--display);font-weight:900;letter-spacing:-.06em;line-height:1}
+.arrow{flex:0 0 auto!important;align-self:center;color:var(--lime);font-size:34px;font-weight:900}
+/* showcase */
+.showhead{display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
+.meter{display:flex;flex-direction:column;align-items:flex-end;gap:4px;text-align:right}
+.meter .big{font-size:84px}.meter span{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.phones{display:flex;justify-content:center;gap:34px;align-items:flex-start;flex:1}
+.phone{display:flex;flex-direction:column;gap:10px;align-items:center}
+.device{width:206px;height:366px;border-radius:30px;padding:8px;background:#1e2629;border:1px solid #46524f;box-shadow:0 18px 50px #0009;position:relative}
+.screen{width:190px;height:350px;border-radius:23px;overflow:hidden;background:#000;position:relative}
+.screen iframe{position:absolute;left:0;top:0;width:360px;height:663px;border:0;transform:scale(.5278);transform-origin:0 0;background:#000}
+.cap{text-align:center;font-size:14px;font-weight:700;color:var(--ink)}.cap small{display:block;font-size:12px;font-weight:600;color:var(--dim);text-align:center;margin-top:2px;letter-spacing:.04em}
+.ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:22px;text-align:center;background:repeating-linear-gradient(135deg,#141b1f 0 12px,#11171b 12px 24px)}
+.ph p{font-size:14px;line-height:1.4;color:var(--mut)}
+.ph a{color:var(--bg);background:var(--purple);padding:9px 14px;border-radius:8px;font-weight:800;font-size:13px;text-decoration:none}
+.ph a:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.replay{border:1px solid #455152;background:#ffffff0a;color:#c7d0ca;border-radius:6px;padding:5px 10px;font-size:11px;letter-spacing:.08em;text-transform:uppercase}.replay:hover,.replay:focus-visible{border-color:var(--lime);outline:none}
+.note{font-size:14px;color:var(--dim)}
+.calendar{display:flex;gap:8px}.calendar i{width:30px;height:8px;border-radius:4px;background:#2a343a}.calendar i.on{background:var(--lime)}.calendar.p i.on{background:var(--purple)}
+</style>
+</head>
+<body>
+
+
+<div id="stage" aria-live="polite">
+  <div class="top"><div class="brand">24<b>PLAY</b></div><div>Match Masters · Partner reboot 2026</div></div>
+
+  <!-- 1 cover -->
+  <section class="slide active" style="justify-content:center;gap:30px">
+    <div style="position:absolute;right:70px;top:150px;width:470px;height:470px;border:1.5px dashed #caff6a4d;border-radius:50%"></div>
+    <div style="position:absolute;right:155px;top:235px;width:300px;height:300px;border:1.5px solid #a8a0ff80;border-radius:50%"></div>
+    <p class="kick">24Play × Match Masters</p>
+    <h1>Match Masters,<br><span class="acc">rebooted.</span></h1>
+    <p class="lead">A new way of working together, so you get more playables, on time, every month.</p>
+    <p class="note" style="position:absolute;left:80px;bottom:62px">Prepared for Renny · Anton, CEO 24Play</p>
+  </section>
+
+  <!-- 2 why -->
+  <section class="slide">
+    <p class="kick">Why I’m here</p>
+    <h2>One goal: become your <span class="acc">most effective</span> playable partner.</h2>
+    <div class="grow"></div>
+    <div class="row">
+      <div class="card"><p class="tag acc">The trip</p><h3>Home visits with every partner</h3><p>Just back from Iberia, where I compared our production across all partners side by side.</p></div>
+      <div class="card"><p class="tag acc">The look</p><h3>You vs. everyone else</h3><p>A close look at how Match Masters production runs compared with our other partners.</p></div>
+      <div class="card"><p class="tag acc">The outcome</p><h3>A clear fix, not a big promise</h3><p>Context first, so every change makes sense. Then concrete actions.</p></div>
+    </div>
+  </section>
+
+  <!-- 3 two ways -->
+  <section class="slide">
+    <p class="kick">How partners work with us</p>
+    <h2>Two workflows. Two outcomes.</h2>
+    <div class="grow"></div>
+    <div class="row">
+      <div class="card" style="border-top:4px solid var(--purple);padding:34px"><p class="tag" style="color:var(--purple)">The Rovio way</p><p style="font-size:14px;color:var(--dim)">Rovio · Lessmore · Voodoo</p><h3 style="font-size:34px">Lean R&amp;D. Best possible playable.</h3><p>Push the strongest single playable to market. One month, two. Time spent isn’t the point.</p><div class="calendar p" aria-label="About 1 playable per month"><i class="on"></i><i></i><i></i><i></i></div><p class="tag" style="color:var(--purple)">≈ 1 playable / month</p></div>
+      <div class="card" style="border-top:4px solid var(--lime);padding:34px"><p class="tag acc">The Miniclip way</p><p style="font-size:14px;color:var(--dim)">Miniclip · Scopely</p><h3 style="font-size:34px">Planned ahead. Strict deadlines.</h3><p>No major changes, smart corners cut, bigger output. Quality in mind, quantity in the crosshair.</p><div class="calendar" aria-label="4 playables per month"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div><p class="tag acc">4 playables / month</p></div>
+    </div>
+  </section>
+
+  <!-- 4 rovio month -->
+  <section class="slide" data-play>
+    <div class="showhead">
+      <div style="display:flex;flex-direction:column;gap:14px"><p class="kick" style="color:var(--purple)">One month, the Rovio way</p><h2>One playable. Pushed as far as it goes.</h2></div>
+      <div class="meter"><p class="big" style="color:var(--purple)">1</p><span>playable this month</span></div>
+    </div>
+    <div class="phones">
+      <div class="phone">
+        <div class="device"><div class="screen">
+          <iframe data-src="playables/ab-rush.html" title="Angry Birds Rush: Building"></iframe>
+        </div></div>
+        <p class="cap">Angry Birds Rush<small>Building · Rovio</small></p>
+      </div>
+      <div style="max-width:460px;align-self:center;display:flex;flex-direction:column;gap:14px">
+        <p class="lead" style="font-size:20px">Weeks of R&amp;D, iteration and polish go into a single creative. It’s a great fit when the goal is the best possible playable, and time isn’t the constraint.</p>
+        <div style="display:flex;gap:16px;align-items:center"><p class="note">Interactive: tap inside the phone to play.</p><button class="replay" id="replayOne">Restart</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 miniclip month -->
+  <section class="slide" data-play>
+    <div class="showhead">
+      <div style="display:flex;flex-direction:column;gap:14px"><p class="kick">One month, the Miniclip way</p><h2>Four playables. Planned, shipped, tested.</h2></div>
+      <div class="meter"><p class="big acc">4</p><span>playables this month</span><button class="replay" id="replayAll" style="margin-top:8px">Restart all</button></div>
+    </div>
+    <div class="phones">
+      <div class="phone"><div class="device"><div class="screen"><iframe data-src="playables/mg-stickers.html" title="Monopoly Go: 3 Stickers Left"></iframe></div></div><p class="cap">3 Stickers Left<small>Monopoly Go · Scopely</small></p><button class="replay again">↻ Reload</button></div>
+      <div class="phone"><div class="device"><div class="screen"><iframe data-src="playables/mg-shell.html" title="Monopoly Go: Fortune Shell"></iframe></div></div><p class="cap">Fortune Shell<small>Monopoly Go · Scopely</small></p><button class="replay again">↻ Reload</button></div>
+      <div class="phone"><div class="device"><div class="screen"><iframe data-src="playables/mg-rent.html" title="Monopoly Go: It’s Rent O’Clock"></iframe></div></div><p class="cap">It’s Rent O’Clock<small>Monopoly Go · Scopely</small></p><button class="replay again">↻ Reload</button></div>
+      <div class="phone"><div class="device"><div class="screen"><iframe data-src="playables/mg-plinko.html" title="Monopoly Go: Let’s Plinko"></iframe></div></div><p class="cap">Let’s Plinko<small>Monopoly Go · Scopely</small></p><button class="replay again">↻ Reload</button></div>
+    </div>
+    
+  </section>
+
+  <!-- 6 legacy -->
+  <section class="slide" style="background:var(--lime);color:var(--bg);justify-content:center;gap:34px">
+    <p class="kick" style="color:#2f4a10">The honest part</p>
+    <h1 style="font-size:88px;letter-spacing:-.05em;line-height:1">Match Masters started the Rovio way.<br>It’s time for a hard reboot.</h1>
+    <p class="lead" style="color:#2a3a14;max-width:1000px">You’re a Miniclip-way partner running on a Rovio-way legacy. That mismatch is what we fix now.</p>
+  </section>
+
+  <!-- 7 rules -->
+  <section class="slide">
+    <p class="kick">Production rules</p>
+    <h2>Three rules we both stick to.</h2>
+    <div class="grow"></div>
+    <div class="row">
+      <div class="card" style="padding:34px"><p class="big acc" style="font-size:120px">4</p><h3>Plan for 4</h3><p>Planning is crucial. Set a plan of 4 playables and stick to it, no matter what.</p></div>
+      <div class="card" style="padding:34px"><p class="big" style="font-size:120px;color:var(--orange)">0</p><h3>Never cancel</h3><p>Zero cancellations. All completed work goes into testing.</p></div>
+      <div class="card" style="padding:34px"><p class="big" style="font-size:120px;color:var(--teal)">→</p><h3>Limit feedback loops</h3><p>Every change causes delays. New idea? It goes into next month’s playable.</p></div>
+    </div>
+  </section>
+
+  <!-- 8 workflow -->
+  <section class="slide">
+    <p class="kick">The big change</p>
+    <h2>A new mutual workflow. Clear owners.</h2>
+    <div class="grow"></div>
+    <div class="row">
+      <div class="card"><span class="pill you">YOU OWN</span><h3>Creative briefs</h3><p>We help shape briefs and bring ideas, but our time goes into production, not R&amp;D.</p></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="card" style="border:2px solid var(--lime);background:#1d2a1a"><span class="pill we">WE OWN</span><h3>The scope</h3><p style="color:#c6d4c0">We guarantee the 4 playables promised at the start of each month.</p></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="card"><span class="pill you">YOU OWN</span><h3>Exports</h3><p>Our new AI tool makes exporting easy: 5+ gameplay variants from every playable.</p></div>
+    </div>
+  </section>
+
+  <!-- 9 templates -->
+  <section class="slide" style="background:radial-gradient(ellipse at 15% 90%,#1d2a1a,var(--bg) 60%)">
+    <p class="kick">A new name for what we make</p>
+    <h2 style="font-size:72px">Not playable ads.<br><span class="acc">Playable templates.</span></h2>
+    <div class="grow"></div>
+    <div style="display:flex;gap:34px;align-items:center">
+      <div><p class="big" style="font-size:120px">4</p><p class="lead" style="font-size:20px">templates / month</p></div>
+      <p class="big" style="font-size:70px;color:#5d6b68">×</p>
+      <div><p class="big" style="font-size:120px">5+</p><p class="lead" style="font-size:20px">exports each</p></div>
+      <p class="big" style="font-size:70px;color:#5d6b68">=</p>
+      <div><p class="big acc" style="font-size:120px">20+</p><p class="lead acc" style="font-size:20px">gameplay variants to test</p></div>
+    </div>
+  </section>
+
+  <!-- 10 actions -->
+  <section class="slide">
+    <p class="kick">Our commitments</p>
+    <h2>We fell short. Here’s how we make it right.</h2>
+    <div class="grow"></div>
+    <div style="display:flex;flex-direction:column">
+      <div style="display:flex;gap:36px;align-items:center;padding:22px 0;border-top:1px solid var(--line)"><p class="big acc" style="font-size:40px;min-width:60px">01</p><div style="display:flex;flex-direction:column;gap:6px"><h3>A fresh start for the team</h3><p class="lead" style="font-size:18px">We treat this as a brand-new partnership: new team setup, new way of operating, even a renamed channel.</p></div></div>
+      <div style="display:flex;gap:36px;align-items:center;padding:22px 0;border-top:1px solid var(--line)"><p class="big acc" style="font-size:40px;min-width:60px">02</p><div style="display:flex;flex-direction:column;gap:6px"><h3>AI &amp; brief-building session in Israel</h3><p class="lead" style="font-size:18px">When I visit, we run a hands-on session: how the AI export agent works and how to build briefs fast.</p></div></div>
+      <div style="display:flex;gap:36px;align-items:center;padding:22px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><p class="big acc" style="font-size:40px;min-width:60px">03</p><div style="display:flex;flex-direction:column;gap:6px"><h3>An extra developer for one month</h3><p class="lead" style="font-size:18px">On us, to make up for the playables we missed in the last period.</p></div></div>
+    </div>
+  </section>
+
+  <!-- 11 close -->
+  <section class="slide" style="justify-content:center;gap:34px">
+    <p class="kick">Starting now</p>
+    <h1 style="font-size:104px">A new partnership.<br><span class="acc">Same great game.</span></h1>
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+      <span class="pill we" style="font-size:17px;padding:10px 20px">Plan the first 4</span>
+      <span class="pill we" style="font-size:17px;padding:10px 20px">First brief from your side</span>
+      <span class="pill we" style="font-size:17px;padding:10px 20px">Book the Israel session</span>
+    </div>
+    <p class="note" style="position:absolute;left:80px;bottom:62px">Thank you, Renny · Anton, CEO 24Play</p>
+  </section>
+
+  <div class="foot">
+    <button class="nav" id="prev" aria-label="Previous slide">‹</button>
+    <div class="bar"><i id="prog"></i></div>
+    <span class="num" id="num">01 / 11</span>
+    <button class="nav" id="next" aria-label="Next slide">›</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var stage=document.getElementById('stage');
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var cur=0;
+  function fit(){var s=Math.min(window.innerWidth/1440,window.innerHeight/810);document.documentElement.style.setProperty('--s',s);}
+  function pad(n){return (n<10?'0':'')+n;}
+  // Playables share one main thread, so start them one at a time: each waits for the previous to finish loading
+  var queue=[],busy=false,gen=0;
+  function pump(){if(busy||!queue.length)return;var f=queue.shift();busy=true;var g=gen;var done=function(){if(g!==gen)return;setTimeout(function(){busy=false;pump();},2500);};f.addEventListener('load',done,{once:true});f.src=f.dataset.src;}
+  function load(sl){sl.querySelectorAll('iframe[data-src]').forEach(function(f){if(f.dataset.on!=='1'){f.dataset.on='1';queue.push(f);}});pump();}
+  function unload(sl){gen++;queue=[];busy=false;sl.querySelectorAll('iframe[data-src]').forEach(function(f){f.dataset.on='';f.src='about:blank';});}
+  function reloadOne(f){f.src='about:blank';setTimeout(function(){f.src=f.dataset.src;},60);}
+  function go(i){
+    i=Math.max(0,Math.min(slides.length-1,i));
+    if(i===cur&&slides[i].classList.contains('active')){load(slides[i]);return;}
+    unload(slides[cur]);slides[cur].classList.remove('active');
+    cur=i;slides[cur].classList.add('active');load(slides[cur]);
+    document.getElementById('num').textContent=pad(cur+1)+' / '+pad(slides.length);
+    document.getElementById('prog').style.width=((cur+1)/slides.length*100)+'%';
+    try{history.replaceState(null,'','#s'+(cur+1));}catch(e){}
+  }
+  document.getElementById('prev').onclick=function(){go(cur-1);};
+  document.getElementById('next').onclick=function(){go(cur+1);};
+  document.getElementById('replayOne').onclick=document.getElementById('replayAll').onclick=function(){var sl=slides[cur];unload(sl);setTimeout(function(){load(sl);},60);};
+  document.querySelectorAll('.again').forEach(function(btn){btn.onclick=function(){reloadOne(btn.closest('.phone').querySelector('iframe'));};});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();go(cur+1);}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1);}
+  });
+  window.addEventListener('resize',fit);fit();
+  var m=/^#s(\d+)$/.exec(location.hash||'');
+  go(m?parseInt(m[1],10)-1:0);
+})();
+</script>
+
+</body>
+</html>
