@@ -1,0 +1,895 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>24Play — Ideation & Export Best Practices</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&family=Inter+Tight:wght@500..900&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0c1015;--ink:#f5f7f1;--mut:#a6b1b0;--lime:#caff6a;--orange:#ff987c;--purple:#a8a0ff;--teal:#7ce0d7;--line:rgba(255,255,255,.13);--s:1}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#05070a;color:var(--ink);font-family:Inter,"Segoe UI",Arial,sans-serif}button,input{font:inherit}button{cursor:pointer}
+#stage{position:absolute;width:1440px;height:810px;top:50%;left:50%;transform:translate(-50%,-50%) scale(var(--s));transform-origin:center;overflow:hidden;background:#0d1117;box-shadow:0 22px 110px #000b;border:1px solid #283039}
+#stage::after{content:"";z-index:20;position:absolute;pointer-events:none;inset:0;background:repeating-linear-gradient(0deg,transparent 0,transparent 3px,rgba(255,255,255,.006) 4px)}
+.slide{display:none;position:absolute;inset:0;padding:100px 82px 70px;overflow:hidden;background:radial-gradient(ellipse at 100% 10%,rgba(106,137,138,.10),transparent 55%),var(--bg)}
+.slide.active{display:block}.slide::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.36;background-image:radial-gradient(#ffffff22 .8px,transparent .8px);background-size:26px 26px;mask-image:linear-gradient(100deg,transparent 4%,black 100%)}.slide>*{position:relative;z-index:1}
+.topbar{position:absolute;z-index:30;left:80px;right:80px;top:36px;height:32px;display:flex;justify-content:space-between;align-items:center;color:#d8e0dc;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+.brand{font-size:18px;font-weight:900;letter-spacing:-.05em;color:var(--lime)}.brand b{color:white;font-weight:900}.topright{display:flex;align-items:center;gap:14px;color:#95a09f;font-size:12px}
+.bottom{position:absolute;z-index:30;left:82px;right:82px;bottom:24px;display:flex;align-items:center;gap:16px;height:28px}.progress{height:2px;background:#3b4949;flex:1;position:relative;border-radius:2px;overflow:hidden}.progress>i{position:absolute;left:0;top:0;bottom:0;background:var(--lime);width:0;transition:width .3s}.slideNumber{color:#b8c5c0;min-width:68px;font-size:12px;letter-spacing:.14em}.navbtn{border:1px solid #52615f;background:#ffffff08;color:#d7ddd8;width:32px;height:28px;border-radius:5px}.navbtn:hover,.utility:hover{background:#ffffff18;border-color:var(--lime)}.utility{background:#ffffff0a;border:1px solid #455152;color:#c7d0ca;border-radius:5px;padding:6px 10px;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.kicker{font-size:13px;text-transform:uppercase;letter-spacing:.18em;color:var(--lime);font-weight:800;margin-bottom:16px}.kicker em{color:#a6b1b0;font-style:normal;margin-left:10px}
+h1,h2,h3,p{margin:0}h1{font-size:98px;letter-spacing:-.075em;line-height:.96;font-weight:850}h2{font-size:59px;letter-spacing:-.065em;line-height:1.05;font-weight:850;max-width:1200px}h3{font-size:25px;line-height:1.08;letter-spacing:-.04em;font-weight:800}.lead{font-size:21px;line-height:1.42;color:#b3bfba;max-width:960px;margin-top:22px}.accent{color:var(--lime)}.accent2{color:var(--orange)}.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#91a09c;font-weight:750}
+.grid{display:grid;gap:16px}.three{grid-template-columns:repeat(3,1fr)}.four{grid-template-columns:repeat(4,1fr)}.two{grid-template-columns:repeat(2,1fr)}.panel{border:1px solid var(--line);background:linear-gradient(135deg,#1b2228de,#141a1fbe);border-radius:18px;padding:28px;overflow:hidden}.panel p{color:#aebdb8;line-height:1.45;font-size:17px;margin-top:11px}.panel.small{padding:22px}.panel.small h3{font-size:22px}.panel .num{color:var(--lime);font-size:12px;font-weight:900;letter-spacing:.15em;margin-bottom:25px}.chip{display:inline-flex;align-items:center;border-radius:100px;padding:7px 11px;border:1px solid #5a6c5d;background:#b5ff7820;color:#caff6a;font-size:12px;font-weight:750;letter-spacing:.035em}.chip.orange{border-color:#bc755d;background:#ff987c16;color:#ffac98}.chip.gray{background:#ffffff0b;border-color:#4d575b;color:#bdc9c5}.line{height:1px;background:var(--line)}.callout{border-left:3px solid var(--lime);background:#caff6a0d;padding:14px 19px;font-size:17px;line-height:1.4;color:#dce8d7}
+.heroGrid{display:grid;grid-template-columns:1.06fr .94fr;gap:52px;height:100%;align-items:center}.heroGrid .lede{font-size:24px;line-height:1.4;color:#b6c3bd;margin-top:30px;max-width:620px}.tiny{font-size:12px;color:#82918c;line-height:1.4}.bigMark{font-size:178px;font-weight:900;letter-spacing:-.12em;line-height:.85;color:#caff6a;opacity:.95}.heroGraphic{height:530px;position:relative;display:grid;place-items:center}.heroGraphic .orbit{border:1px solid #caff6a4d;position:absolute;border-radius:50%;width:480px;height:480px;animation:rotate 25s linear infinite}.heroGraphic .orbit.a{width:370px;height:370px;border-style:dashed;animation-direction:reverse}.heroGraphic .orbit.b{width:265px;height:265px;border-color:#a8a0ff90}.heroGraphic .node{position:absolute;padding:12px 17px;border-radius:11px;color:white;border:1px solid #626f6a;background:#1e2724;box-shadow:0 10px 35px #0007;font-weight:700;font-size:14px}.heroGraphic .n1{top:35px;right:0}.heroGraphic .n2{bottom:56px;left:4px}.heroGraphic .n3{right:-8px;bottom:134px}.heroGraphic .n4{top:92px;left:-20px}@keyframes rotate{to{transform:rotate(360deg)}}
+.s2flow{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:24px;align-items:stretch;margin-top:53px;height:340px}.flowBlock{border:1px solid #4c5956;border-radius:20px;background:#1b2327;padding:27px;display:flex;flex-direction:column;justify-content:space-between}.flowBlock.mid{background:linear-gradient(140deg,#28402e,#1b2926);border-color:#7b9c5b}.flowBlock .bigNo{font-size:65px;color:#fff;line-height:1;letter-spacing:-.06em;font-weight:850}.arrow{font-size:45px;color:var(--lime);align-self:center}.flowBlock p{font-size:17px;color:#bac7c0;line-height:1.35}.micro{display:flex;gap:10px;flex-wrap:wrap;margin-top:17px}.micro span{font-size:12px;padding:8px 10px;background:#ffffff0d;border:1px solid #ffffff1b;border-radius:7px;color:#ccd5d0}
+.cardIcon{font-size:30px;margin-bottom:26px}.rule{display:flex;align-items:flex-start;gap:12px;margin-top:18px;font-size:17px;color:#aebbb5;line-height:1.35}.rule strong{color:var(--lime)}
+.filter{display:grid;grid-template-columns:90px 1fr 1.08fr;align-items:center;gap:19px;border:1px solid #34413f;background:#ffffff07;border-radius:12px;padding:19px 25px;margin-bottom:11px}.filter .badgeNumber{font-size:28px;color:var(--lime);font-weight:900}.filter b{font-size:22px}.filter span{font-size:16px;color:#b4c0bb;line-height:1.35}
+.storyboard{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:47px}.beat{background:#171f23;border:1px solid #42504e;border-radius:17px;position:relative;height:380px;padding:20px}.beat .beatnum{font-size:70px;color:#344745;font-weight:900;letter-spacing:-.08em}.beat:nth-child(1){border-color:var(--lime)}.beat:nth-child(4){border-color:var(--orange)}.beat h3{font-size:24px;margin-top:58px}.beat p{font-size:16px;line-height:1.35;color:#b6c4be;margin-top:15px}.beat .bar{width:50px;height:4px;background:var(--lime);position:absolute;top:125px;left:22px}.beat:nth-child(4) .bar{background:var(--orange)}
+.hookGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:36px}.hook{height:432px;position:relative;border:1px solid #40504d;background:radial-gradient(circle at 50% 30%,#293c33,#171d23 62%);border-radius:20px;padding:23px;overflow:hidden}.hook h3{position:absolute;left:23px;top:310px;right:20px}.hook p{position:absolute;left:23px;top:350px;right:21px;font-size:15px;line-height:1.32;color:#aab9b2}.hook .visual{width:100%;height:242px;border-radius:13px;background:#0d1719;display:grid;place-items:center;overflow:hidden;position:relative}.hook .visual svg{width:100%;height:100%}.hook .tag{position:absolute;left:12px;top:11px;font-size:11px;letter-spacing:.09em;background:#141b1dd6;padding:7px 9px;border:1px solid #ffffff1a;border-radius:9px;font-weight:800}
+.videoGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;margin-top:28px;height:415px}.mediaCard{background:#161d23;border:1px solid #4b5b56;border-radius:22px;position:relative;display:grid;grid-template-columns:220px 1fr;gap:20px;padding:18px;overflow:hidden}.mediaCard h3{margin:20px 0 9px;font-size:25px}.mediaCard p{font-size:16px;line-height:1.42;color:#aab9b2}.mediaSlot{border:1px dashed #829a7c;background:linear-gradient(145deg,#293c30,#11191c);border-radius:15px;position:relative;overflow:hidden;cursor:pointer;height:376px}.mediaSlot video{width:100%;height:100%;object-fit:contain;display:none;background:black}.mediaSlot.hasVideo video{display:block}.mediaSlot.hasVideo .placeholder{display:none}.mediaSlot input{display:none}.mediaSlot .placeholder{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:16px;gap:12px}.placeholder .playCircle{width:72px;height:72px;border-radius:50%;border:1px solid #a9e6a0;background:#d9ffad15;display:grid;place-items:center;font-size:33px;color:var(--lime)}.placeholder span{font-size:15px;font-weight:800}.placeholder small{color:#a7b8ab;font-size:12px;line-height:1.45}.uploadBadge{position:absolute;bottom:7px;right:7px;background:#0c161dcc;border:1px solid #ffffff30;padding:5px 8px;font-size:10px;border-radius:5px;display:none}.mediaSlot.hasVideo .uploadBadge{display:block}.mediaSlot.drag{border-color:var(--lime);box-shadow:inset 0 0 0 2px #caff6a}
+.checkList{display:grid;gap:12px;margin-top:25px}.checkRow{font-size:15px;color:#c7d1cb;line-height:1.35;display:flex;gap:10px;align-items:flex-start}.checkRow i{color:var(--lime);font-style:normal}.noteStrip{display:flex;justify-content:space-between;margin-top:24px;align-items:center;color:#b5c3ba;font-size:15px;border:1px solid #506353;padding:13px 18px;border-radius:11px;background:#caff6a0c}
+.ladder{display:grid;grid-template-columns:.72fr 1.2fr .87fr;gap:20px;margin-top:36px;height:410px}.ladder .center{display:flex;flex-direction:column;justify-content:space-between;padding:5px 10px}.level{display:flex;align-items:center;gap:18px;background:#1c2828;border:1px solid #55685d;border-radius:12px;padding:17px 20px;font-size:20px;font-weight:800}.level small{display:block;margin-top:6px;color:#aabcaf;font-size:14px;font-weight:400}.level .dots{border-radius:50%;width:30px;height:30px;background:var(--lime);color:#121b12;display:grid;place-items:center;font-size:14px;font-weight:900}.ladder .aside{border:1px solid #424f4f;border-radius:16px;padding:25px;background:#161e23}.ladder .aside p{color:#b9c6bf;font-size:18px;line-height:1.5;margin-top:23px}.verticalArrow{text-align:center;font-size:23px;line-height:17px;color:var(--lime)}
+.ctaLayout{display:grid;grid-template-columns:1.1fr .9fr;gap:38px;margin-top:34px}.ctaPhone{width:270px;height:426px;border:10px solid #31423c;border-radius:41px;background:linear-gradient(#29414b,#142725);margin:auto;padding:20px;position:relative;box-shadow:0 0 0 1px #98b59e,0 20px 60px #0007}.ctaPhone .ctaGame{height:282px;background:radial-gradient(circle at 50% 60%,#3f7461,#132b2d);border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px}.ctaGame .circle{width:90px;height:90px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 15px #caff6a22}.ctaPhone .ctaButton{background:var(--lime);border-radius:13px;color:#182117;text-align:center;padding:18px;font-weight:900;font-size:18px;margin-top:16px;box-shadow:0 0 30px #caff6a66}
+.feedback{display:grid;grid-template-columns:1.15fr .9fr;gap:34px;margin-top:33px}.feedTimeline{position:relative;display:flex;flex-direction:column;gap:13px}.feedTimeline::before{content:"";height:86%;position:absolute;left:34px;top:10px;width:2px;background:#7c9d74}.feedNode{display:flex;align-items:center;gap:18px;position:relative;z-index:1;background:#1a2525;border:1px solid #405047;border-radius:13px;padding:14px 18px}.feedDot{width:33px;height:33px;border-radius:50%;background:var(--lime);color:#223021;display:grid;place-items:center;font-weight:900;flex:none}.feedNode h3{font-size:20px}.feedNode p{margin-top:6px;font-size:14px;color:#aabab0}.log{background:#f3f3e8;color:#1b2825;padding:26px;border-radius:19px;transform:rotate(1deg);box-shadow:0 20px 30px #0008}.log h3{font-size:29px}.log .paperRow{border-bottom:1px solid #9db1a8;margin-top:19px;padding-bottom:13px;font-size:15px}.log .paperRow strong{display:block;font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:#496d52;margin-bottom:6px}.log .suggested{display:inline-block;margin-top:21px;background:#d5ef9b;padding:6px 10px;border-radius:4px;font-size:12px;font-weight:900}
+.matrix{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:41px}.matrix>div{background:#182322;border:1px solid #4d6455;padding:27px;border-radius:19px}.matrix h3{margin-bottom:22px;font-size:29px}.matrix ul{margin:0;padding:0;list-style:none}.matrix li{border-top:1px solid #ffffff16;padding:17px 0;font-size:19px;color:#c2d0c4}.matrix .symbol{color:var(--lime);font-weight:900;margin-right:12px}
+.toolGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:36px}.toolCard{height:390px;border-radius:17px;border:1px solid #4b5b58;background:linear-gradient(130deg,#1e2b29,#151a20);padding:22px;position:relative}.toolCard h3{font-size:25px}.toolCard p{font-size:16px;line-height:1.4;color:#b0bfb6;margin-top:17px}.toolCard .iconBox{height:110px;margin-bottom:32px;display:grid;place-items:center;border:1px solid #576f60;border-radius:15px;color:var(--lime);font-size:65px;font-weight:900;background:radial-gradient(circle,#395743,#1a2628)}.toolCard .bottomWord{position:absolute;bottom:20px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#89bf84;font-weight:800}
+.pipe{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:63px}.pipeItem{height:278px;border:1px solid #4b5e58;background:#1a2426;border-radius:15px;padding:19px}.pipeItem .id{font-weight:950;font-size:58px;color:#516c5a;letter-spacing:-.09em}.pipeItem h3{margin-top:25px;font-size:22px}.pipeItem p{margin-top:13px;color:#b1beb7;font-size:15px;line-height:1.36}.pipeItem:last-child{background:linear-gradient(130deg,#355537,#1c302a);border-color:#95b767}
+.specTable{width:100%;border-collapse:collapse;margin-top:38px;font-size:17px}.specTable th{text-align:left;text-transform:uppercase;letter-spacing:.12em;color:#b0bfba;font-size:12px;padding:16px;border-bottom:1px solid #738174}.specTable td{padding:19px 16px;line-height:1.35;color:#d7e0d7;border-bottom:1px solid #35453f}.specTable td:first-child{font-weight:900;font-size:20px;color:var(--lime)}.specTable tr:nth-child(odd){background:#ffffff07}.sourceFoot{font-size:12px;color:#a9b8af;line-height:1.5;margin-top:23px}.sourceFoot a{color:#a4dc99;text-decoration:none;border-bottom:1px dotted #a4dc99}
+.qaGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:29px}.qaItem{border:1px solid #48574f;border-radius:13px;background:#18231f;padding:16px 20px;display:flex;gap:17px;align-items:flex-start;min-height:77px;cursor:pointer;user-select:none}.qaItem input{appearance:none;width:25px;height:25px;flex:none;border:2px solid #849388;border-radius:6px;margin:0}.qaItem input:checked{background:var(--lime);border-color:var(--lime)}.qaItem input:checked::after{content:"✓";color:#1c271b;font-size:18px;font-weight:950;display:block;text-align:center;line-height:20px}.qaItem strong{display:block;font-size:17px}.qaItem small{font-size:13px;color:#acbbb0;display:block;margin-top:5px}.qaSummary{display:flex;align-items:center;gap:18px;margin-top:26px}.qaSummary .summarybar{height:7px;background:#30473c;flex:1;border-radius:8px;overflow:hidden}.qaSummary .summarybar i{background:var(--lime);height:100%;display:block;width:0;transition:width .2s}.qaSummary strong{color:var(--lime);font-size:21px}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:19px;margin-top:35px}.galleryCard{height:450px;border-radius:19px;background:#19221f;border:1px solid #526157;overflow:hidden;display:grid;grid-template-rows:1fr 93px}.galleryCard .mediaSlot{height:100%;border:0;border-radius:0}.galleryCard .galleryCaption{padding:15px 18px;background:#182320}.galleryCard h3{font-size:19px}.galleryCard p{font-size:13px;color:#a7b8ad;margin-top:7px}.galleryCard .mediaSlot .placeholder{background:radial-gradient(circle at 50% 50%,#3e5a4b,#192b32 58%,#10191d)}
+.closeTitle{font-size:92px;line-height:.98;letter-spacing:-.075em;font-weight:900;max-width:1050px}.closeBottom{position:absolute;left:83px;right:83px;bottom:115px;display:flex;gap:15px}.closeBottom .pill{border:1px solid #607663;padding:18px 23px;border-radius:100px;background:#bbff6d0c;font-size:19px;font-weight:800}
+.outlineOverlay{position:absolute;inset:0;background:#08110ff2;backdrop-filter:blur(18px);z-index:80;display:none;padding:75px 90px}.outlineOverlay.open{display:block}.outHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}.outHeader h2{font-size:53px}.outlineGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.outlineItem{padding:18px;border:1px solid #506355;border-radius:11px;background:#17241f;text-align:left;color:#e4ece7;height:85px;display:flex;gap:13px;align-items:center}.outlineItem.current{border-color:var(--lime);background:#2c4932}.outlineItem b{color:var(--lime);font-size:17px}.outlineItem span{font-size:16px;font-weight:750}.help{position:absolute;right:82px;bottom:64px;z-index:35;font-size:11px;color:#6c8078}
+@media print{html,body{overflow:visible;background:white}#stage{position:static;transform:none!important;box-shadow:none;border:none;margin:0;width:1440px;height:auto;overflow:visible}.slide{position:relative!important;display:block!important;width:1440px;height:810px;page-break-after:always;animation:none!important}.topbar,.bottom,.outlineOverlay,.help{display:none!important}@page{size:1440px 810px;margin:0}}
+</style>
+<style id="motion">
+/* ===== Motion layer ===== */
+:root{--ease:cubic-bezier(.16,1,.3,1);--spring:cubic-bezier(.34,1.56,.64,1)}
+/* slide transitions (direction-aware) */
+.slide.active{z-index:2;animation:slideInF .8s var(--ease) both}
+#stage[data-dir=back] .slide.active{animation-name:slideInB}
+.slide.leaving{display:block;z-index:1;pointer-events:none;animation:slideOutF .5s cubic-bezier(.5,0,.75,0) both}
+#stage[data-dir=back] .slide.leaving{animation-name:slideOutB}
+@keyframes slideInF{from{opacity:0;translate:90px 0;scale:1.015}to{opacity:1;translate:0 0;scale:1}}
+@keyframes slideInB{from{opacity:0;translate:-90px 0;scale:1.015}to{opacity:1;translate:0 0;scale:1}}
+@keyframes slideOutF{to{opacity:0;translate:-70px 0;scale:.97;filter:blur(4px)}}
+@keyframes slideOutB{to{opacity:0;translate:70px 0;scale:.97;filter:blur(4px)}}
+/* headline word reveal */
+.w{display:inline-block;transform-origin:0 100%}
+.slide.active .w{animation:wordIn .9s var(--ease) both;animation-delay:calc(var(--hd,.12s) + var(--wi,0) * 48ms)}
+@keyframes wordIn{from{opacity:0;translate:0 .5em;rotate:5deg;filter:blur(12px)}to{opacity:1;translate:0 0;rotate:0deg;filter:blur(0)}}
+.slide.active :is(h1 .accent,.closeTitle .accent,.closeTitle .accent2) .w{animation:wordIn .9s var(--ease) both,glowText 2.8s ease-in-out infinite alternate;animation-delay:calc(var(--hd,.12s) + var(--wi,0) * 48ms),calc(var(--hd,.12s) + var(--wi,0) * 48ms + 1s)}
+@keyframes glowText{to{text-shadow:0 0 38px currentColor}}
+/* staggered reveal */
+.slide.active .rv{animation:rvUp .8s var(--ease) var(--d,0s) both}
+.slide.active .rv-left{animation-name:rvLeft}
+.slide.active .rv-pop{animation-name:rvPop;animation-timing-function:var(--spring)}
+.slide.active .rv-drop{animation-name:rvDrop;animation-duration:1.1s}
+@keyframes rvUp{from{opacity:0;translate:0 34px;filter:blur(6px)}to{opacity:1;translate:0 0;filter:blur(0)}}
+@keyframes rvLeft{from{opacity:0;translate:-40px 0}to{opacity:1;translate:0 0}}
+@keyframes rvPop{from{opacity:0;scale:.6}to{opacity:1;scale:1}}
+@keyframes rvDrop{from{opacity:0;translate:40px -70px;rotate:9deg}to{opacity:1;translate:0 0;rotate:0deg}}
+/* ambient glow + parallax */
+.slide>.fx-glow{position:absolute;z-index:0;pointer-events:none;border-radius:50%;width:760px;height:760px;transition:translate 1.4s var(--ease)}
+.slide>.fx-glow.g1{right:-260px;top:-300px;background:radial-gradient(circle,rgba(202,255,106,.12),transparent 64%);translate:calc(var(--px,0) * -36px) calc(var(--py,0) * -28px)}
+.slide>.fx-glow.g2{left:-300px;bottom:-380px;width:820px;height:820px;background:radial-gradient(circle,rgba(168,160,255,.10),transparent 64%);translate:calc(var(--px,0) * 30px) calc(var(--py,0) * 24px)}
+.slide.active>.fx-glow{animation:glowIn 1.8s ease both,drift 14s ease-in-out 1.8s infinite alternate}
+.slide.active>.fx-glow.g2{animation-duration:1.8s,19s}
+@keyframes glowIn{from{opacity:0;scale:.6}}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}50%{transform:translate(-70px,45px) scale(1.12)}100%{transform:translate(45px,-30px) scale(.94)}}
+.slide::before{background-position:calc(var(--px,0) * -14px) calc(var(--py,0) * -14px);transition:background-position 1s var(--ease)}
+/* card hover + cursor spotlight */
+.panel,.flowBlock,.matrix>div,.ladder .aside,.filter,.qaItem,.galleryCard,.pipeItem{position:relative}
+.panel,.flowBlock,.beat,.hook,.toolCard,.pipeItem,.mediaCard,.galleryCard,.matrix>div,.ladder .aside{transition:transform .45s var(--ease),border-color .3s,box-shadow .45s var(--ease)}
+:is(.panel,.flowBlock,.beat,.hook,.toolCard,.pipeItem,.mediaCard,.galleryCard,.matrix>div,.ladder .aside):hover{transform:translateY(-6px);border-color:#caff6a8c;box-shadow:0 24px 60px #000a,0 0 0 1px #caff6a22}
+:is(.panel,.flowBlock,.beat,.hook,.toolCard,.pipeItem,.mediaCard,.galleryCard,.matrix>div,.ladder .aside,.filter,.qaItem,.feedNode)::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s;background:radial-gradient(360px circle at var(--mx,50%) var(--my,50%),rgba(202,255,106,.11),transparent 60%)}
+:is(.panel,.flowBlock,.beat,.hook,.toolCard,.pipeItem,.mediaCard,.galleryCard,.matrix>div,.ladder .aside,.filter,.qaItem,.feedNode):hover::after{opacity:1}
+/* hero */
+.heroGraphic{transform:perspective(1000px) rotateY(calc(var(--px,0) * 7deg)) rotateX(calc(var(--py,0) * -7deg));transition:transform .9s var(--ease)}
+.heroGraphic .orbit::before{content:"";position:absolute;top:-6px;left:calc(50% - 6px);width:12px;height:12px;border-radius:50%;background:var(--lime);box-shadow:0 0 18px 3px #caff6a99}
+.heroGraphic .orbit.a::before{background:var(--orange);box-shadow:0 0 18px 3px #ff987c88;top:auto;bottom:-6px}
+.heroGraphic .orbit.b::before{background:var(--purple);box-shadow:0 0 18px 3px #a8a0ff88;left:-6px;top:calc(50% - 6px)}
+.slide.active .heroGraphic .orbit{animation:orbitIn 1.4s var(--ease) .45s both,rotate 25s linear infinite}
+.slide.active .heroGraphic .orbit.a{animation-duration:1.4s,18s;animation-delay:.6s,0s;animation-direction:normal,reverse}
+.slide.active .heroGraphic .orbit.b{animation-duration:1.4s,12s;animation-delay:.3s,0s}
+@keyframes orbitIn{from{opacity:0;scale:.4}}
+.heroGraphic .node{transition:border-color .3s,box-shadow .3s}.heroGraphic .node:hover{border-color:var(--lime);box-shadow:0 0 30px #caff6a44}
+.slide.active .heroGraphic .node.rv{animation:rvPop .8s var(--spring) var(--d) both,bob 4.5s ease-in-out calc(var(--d) + .8s) infinite alternate}
+.slide.active .heroGraphic .n2.rv{animation-duration:.8s,5.4s}.slide.active .heroGraphic .n3.rv{animation-duration:.8s,3.9s}.slide.active .heroGraphic .n4.rv{animation-duration:.8s,6s}
+@keyframes bob{from{translate:0 0}to{translate:0 -14px}}
+.bigMark{text-shadow:0 0 50px #caff6a44}
+.slide.active .bigMark.rv{animation:rvPop 1s var(--spring) var(--d) both,nudge 2.6s ease-in-out calc(var(--d) + 1s) infinite}
+@keyframes nudge{0%,100%{translate:0 0}50%{translate:12px -12px;text-shadow:0 0 90px #caff6a99}}
+/* slide 2 */
+.flowBlock.mid::before{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;box-shadow:0 0 0 1px #caff6a,0 0 46px #caff6a40;opacity:0}
+.slide.active .flowBlock.mid::before{animation:breathe 2.8s ease-in-out 1.8s infinite}
+@keyframes breathe{50%{opacity:1}}
+/* slide 3 */
+.panel .cardIcon{display:inline-block;transition:transform .5s var(--spring)}
+.panel:hover .cardIcon{transform:scale(1.25) rotate(-10deg)}
+.slide.active .panel .cardIcon{animation:rvPop .7s var(--spring) calc(var(--d) + .25s) both}
+.noteStrip>span:last-child{background:linear-gradient(90deg,#b5c3ba 40%,#caff6a 50%,#b5c3ba 60%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent}
+.slide.active .noteStrip>span:last-child{animation:shimmer 3.5s linear infinite}
+@keyframes shimmer{from{background-position:100% 0}to{background-position:0% 0}}
+/* slide 4 */
+.filter{transition:transform .35s var(--ease),border-color .3s,background .3s}
+.filter:hover{transform:translateX(8px);border-color:#caff6a70;background:#caff6a0a}
+.filter .badgeNumber{display:inline-block}
+.slide.active .filter .badgeNumber{animation:rvPop .6s var(--spring) calc(var(--d) + .2s) both}
+/* slide 5 */
+.beat::before{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;border:1px solid var(--lime);box-shadow:0 0 34px #caff6a33,inset 0 0 40px #caff6a10;opacity:0}
+.beat:nth-child(4)::before{border-color:var(--orange);box-shadow:0 0 34px #ff987c33,inset 0 0 40px #ff987c10}
+.slide.active .beat::before{animation:seq4 4.8s ease-in-out 1.6s infinite}
+.slide.active .beat:nth-child(2)::before{animation-delay:2.8s}.slide.active .beat:nth-child(3)::before{animation-delay:4s}.slide.active .beat:nth-child(4)::before{animation-delay:5.2s}
+@keyframes seq4{0%,30%,100%{opacity:0}8%,22%{opacity:1}}
+.beat .beatnum{transition:color .4s}.beat:hover .beatnum{color:var(--lime)}.beat:nth-child(4):hover .beatnum{color:var(--orange)}
+.beat .bar{transform-origin:left}
+.slide.active .beat .bar{animation:growX .8s var(--ease) calc(var(--d) + .35s) both}
+@keyframes growX{from{transform:scaleX(0)}}
+/* slide 6: hook SVGs */
+.hook .visual svg{transition:transform .6s var(--ease)}.hook:hover .visual svg{transform:scale(1.07)}
+.hook svg *{transform-box:fill-box;transform-origin:center}
+.slide.active .hook svg path[stroke-dasharray]{animation:march 1.4s linear infinite}
+@keyframes march{to{stroke-dashoffset:-32}}
+.slide.active .hook:nth-child(1) svg :is(circle,circle+path){transform-box:view-box;transform-origin:163px 109px;animation:svgPulse 1.6s ease-in-out infinite}
+.slide.active .hook:nth-child(1) svg rect:nth-of-type(2){animation:slideX 2.4s ease-in-out infinite}
+.slide.active .hook:nth-child(2) svg circle:nth-of-type(2){animation:svgPulse 1.3s ease-in-out infinite}
+.slide.active .hook:nth-child(2) svg path:last-of-type{animation:nudgeX 1.2s ease-in-out infinite}
+.slide.active .hook:nth-child(3) svg circle{animation:svgBob 1.6s ease-in-out infinite alternate}
+.slide.active .hook:nth-child(3) svg circle:nth-of-type(2){animation-delay:.3s}.slide.active .hook:nth-child(3) svg circle:nth-of-type(3){animation-delay:.6s}
+.slide.active .hook:nth-child(4) svg path:nth-of-type(2),.slide.active .hook:nth-child(4) svg path:nth-of-type(3){animation:svgPulse 1.6s ease-in-out infinite}
+.slide.active .hook:nth-child(4) svg path:nth-of-type(3){animation-delay:.8s}
+.slide.active .hook:nth-child(4) svg text{animation:svgPulse 1.6s ease-in-out .4s infinite}
+@keyframes svgPulse{50%{transform:scale(1.16)}}
+@keyframes slideX{50%{transform:translateX(30px)}}
+@keyframes nudgeX{50%{transform:translateX(8px)}}
+@keyframes svgBob{to{transform:translateY(-10px)}}
+/* video placeholders */
+.placeholder .playCircle{position:relative;transition:transform .4s var(--spring)}
+.placeholder .playCircle::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid var(--lime);opacity:0}
+.slide.active .placeholder .playCircle::after{animation:ripple 2.2s ease-out infinite}
+.mediaSlot:hover .playCircle{transform:scale(1.14)}
+@keyframes ripple{from{opacity:.8;transform:scale(1)}to{opacity:0;transform:scale(1.9)}}
+.checkRow i{display:inline-block}.slide.active .checkRow i{animation:rvPop .5s var(--spring) calc(var(--d) + .2s) both}
+/* slide 8: ladder */
+.level{transition:transform .35s var(--ease),border-color .3s}.level:hover{transform:translateX(6px);border-color:var(--lime)}
+.level .dots{position:relative}
+.level .dots::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--lime);opacity:0}
+.slide.active .level .dots::after{animation:ripple 3s ease-out 1.4s infinite}
+.slide.active .level:nth-child(3) .dots::after{animation-delay:2.4s}.slide.active .level:nth-child(5) .dots::after{animation-delay:3.4s}
+.slide.active .verticalArrow.rv{animation:rvUp .8s var(--ease) var(--d) both,bounceY 1.4s ease-in-out calc(var(--d) + .8s) infinite}
+@keyframes bounceY{50%{translate:0 6px}}
+.ladder .aside>div[style*="65px"]{display:inline-block}
+.slide.active .ladder .aside>div[style*="65px"]{animation:nudgeD 2.2s ease-in-out 1s infinite}
+@keyframes nudgeD{50%{translate:10px 10px}}
+/* slide 9: CTA phone */
+.ctaPhone{transform:perspective(900px) rotateY(calc(var(--px,0) * -10deg)) rotateX(calc(var(--py,0) * 7deg));transition:transform .8s var(--ease)}
+.slide.active .ctaPhone.rv{animation:rvUp .9s var(--ease) var(--d) both,phoneFloat 5s ease-in-out calc(var(--d) + .9s) infinite alternate}
+@keyframes phoneFloat{from{translate:0 0;rotate:-1deg}to{translate:0 -12px;rotate:1deg}}
+.ctaPhone .ctaButton{position:relative;overflow:hidden}
+.ctaPhone .ctaButton::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,#ffffffaa 50%,transparent 70%);translate:-120% 0}
+.slide.active .ctaPhone .ctaButton::after{animation:sweep 2.8s ease-in-out 1.6s infinite}
+.slide.active .ctaPhone .ctaButton{animation:breath 2.8s ease-in-out 1.6s infinite}
+@keyframes sweep{0%{translate:-120% 0}45%,100%{translate:120% 0}}
+@keyframes breath{50%{scale:1.04;box-shadow:0 0 46px #caff6a99}}
+.slide.active .ctaGame .circle{animation:rvPop .8s var(--spring) 1.1s both,ring 2s ease-in-out 1.9s infinite}
+@keyframes ring{50%{box-shadow:0 0 0 26px #caff6a10}}
+.ctaPhone::after{content:"";position:absolute;left:calc(50% - 22px);top:336px;width:44px;height:44px;border-radius:50%;border:2px solid #fff;background:#ffffff30;opacity:0;pointer-events:none}
+.slide.active .ctaPhone::after{animation:tap 2.8s ease-out 2.2s infinite}
+@keyframes tap{0%{opacity:0;scale:1.6}15%{opacity:.9;scale:.7}40%{opacity:0;scale:1.9}100%{opacity:0}}
+/* slide 10: feedback */
+.feedTimeline::before{transform-origin:top}
+.slide.active .feedTimeline::before{animation:drawY 1.4s cubic-bezier(.65,0,.35,1) .5s both}
+@keyframes drawY{from{transform:scaleY(0)}}
+.feedTimeline::after{content:"";position:absolute;left:31px;top:10px;width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 14px 4px #caff6aaa;opacity:0;z-index:2;pointer-events:none}
+.slide.active .feedTimeline::after{animation:travelY 3.2s ease-in-out 2s infinite}
+@keyframes travelY{0%{top:10px;opacity:0}10%,85%{opacity:1}100%{top:86%;opacity:0}}
+.feedNode{transition:transform .35s var(--ease),border-color .3s}.feedNode:hover{transform:translateX(6px);border-color:#caff6a80}
+.log{transition:transform .5s var(--ease)}.log:hover{transform:rotate(0deg) translateY(-6px)}
+.slide.active .log .suggested.rv{animation:stamp .6s var(--spring) var(--d) both}
+@keyframes stamp{from{opacity:0;scale:2.2;rotate:-14deg}to{opacity:1;scale:1;rotate:-2deg}}
+/* slide 11: matrix */
+.matrix li{transition:padding .3s var(--ease),color .3s}.matrix li:hover{padding-left:8px;color:#fff}
+.matrix li .symbol{display:inline-block}
+.slide.active .matrix li .symbol{animation:rvPop .5s var(--spring) calc(var(--d) + .2s) both}
+/* slide 12: tools */
+.toolCard .iconBox{position:relative;overflow:hidden;transition:border-color .3s,box-shadow .4s}
+.toolCard .iconBox .ic{display:inline-block;transition:scale .5s var(--spring)}
+.toolCard:hover .iconBox{border-color:var(--lime);box-shadow:inset 0 0 40px #caff6a26}
+.toolCard:hover .iconBox .ic{scale:1.22}
+.slide.active .toolCard .ic{animation:floatY 3s ease-in-out infinite alternate}
+.slide.active .toolCard:nth-child(2) .ic{animation-delay:-.8s}.slide.active .toolCard:nth-child(4) .ic{animation-delay:-1.6s}
+.slide.active .toolCard:nth-child(3) .ic,.slide.active .toolCard:nth-child(5) .ic{animation:spin 10s linear infinite}
+@keyframes floatY{to{translate:0 -8px}}
+@keyframes spin{to{rotate:360deg}}
+.toolCard .iconBox::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,#ffffff1f 50%,transparent 65%);translate:-100% 0}
+.slide.active .toolCard .iconBox::after{animation:sweepBox 4s ease-in-out calc(var(--d) + .6s) infinite}
+@keyframes sweepBox{0%{translate:-100% 0}40%,100%{translate:100% 0}}
+.toolCard .bottomWord{transition:color .3s}.toolCard:hover .bottomWord{color:var(--lime)}
+/* slide 13: export pipe */
+.pipe{position:relative}
+.pipe::before{content:"";position:absolute;left:0;right:0;top:-26px;height:2px;background:linear-gradient(90deg,#caff6a22,#caff6a88);transform-origin:left}
+.slide.active .pipe::before{animation:growX 1.2s var(--ease) .6s both}
+.pipe::after{content:"";position:absolute;top:-31px;left:0;width:12px;height:12px;border-radius:50%;background:var(--lime);box-shadow:0 0 18px 4px #caff6a99;opacity:0}
+.slide.active .pipe::after{animation:travel 6s linear 1.6s infinite}
+@keyframes travel{0%{left:0;opacity:0}3%,97%{opacity:1}100%{left:calc(100% - 12px);opacity:0}}
+.pipeItem::before{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;border:1px solid var(--lime);box-shadow:0 0 30px #caff6a40,inset 0 0 30px #caff6a14;opacity:0}
+.slide.active .pipeItem::before{animation:pipeHi 6s linear infinite}
+.slide.active .pipeItem .id{animation:pipeId 6s linear infinite}
+.slide.active .pipeItem:nth-child(1) :is(.id),.slide.active .pipeItem:nth-child(1)::before{animation-delay:1.6s}
+.slide.active .pipeItem:nth-child(2) :is(.id),.slide.active .pipeItem:nth-child(2)::before{animation-delay:2.6s}
+.slide.active .pipeItem:nth-child(3) :is(.id),.slide.active .pipeItem:nth-child(3)::before{animation-delay:3.6s}
+.slide.active .pipeItem:nth-child(4) :is(.id),.slide.active .pipeItem:nth-child(4)::before{animation-delay:4.6s}
+.slide.active .pipeItem:nth-child(5) :is(.id),.slide.active .pipeItem:nth-child(5)::before{animation-delay:5.6s}
+.slide.active .pipeItem:nth-child(6) :is(.id),.slide.active .pipeItem:nth-child(6)::before{animation-delay:6.6s}
+@keyframes pipeHi{0%,100%{opacity:0}3%,15%{opacity:1}20%{opacity:0}}
+@keyframes pipeId{0%,20%,100%{color:#516c5a;text-shadow:0 0 0 transparent}3%,15%{color:var(--lime);text-shadow:0 0 24px #caff6a88}}
+/* slide 14: spec table */
+.specTable tbody tr{transition:background .3s}.specTable tbody tr:hover{background:#caff6a10}
+/* slide 15: QA */
+.qaItem{transition:border-color .3s,background .3s,transform .3s var(--ease)}
+.qaItem:hover{border-color:#caff6a80;transform:translateY(-3px)}
+.qaItem:has(input:checked){border-color:#caff6aa0;background:linear-gradient(135deg,#24402a,#18231f)}
+.qaItem strong{transition:color .3s}.qaItem:has(input:checked) strong{color:var(--lime)}
+.qaItem input{transition:background .2s,border-color .2s}
+.qaItem input:checked{animation:checkPop .45s var(--spring)}
+@keyframes checkPop{0%{scale:.5}60%{scale:1.25}100%{scale:1}}
+#qaCount{display:inline-block}#qaCount.bump{animation:bump .45s var(--spring)}
+@keyframes bump{50%{scale:1.4}}
+.qaSummary .summarybar i{transition:width .6s var(--ease);box-shadow:0 0 12px var(--lime)}
+.confetti{position:absolute;z-index:60;width:9px;height:14px;border-radius:2px;pointer-events:none}
+.readyToast{position:absolute;z-index:61;left:50%;top:46%;translate:-50% -50%;padding:24px 40px;border-radius:20px;background:var(--lime);color:#14200f;font-weight:900;font-size:38px;letter-spacing:-.04em;box-shadow:0 0 90px #caff6a88;pointer-events:none;animation:toast 2.4s var(--ease) both}
+@keyframes toast{0%{opacity:0;scale:.5}15%{opacity:1;scale:1.06}25%,80%{opacity:1;scale:1}100%{opacity:0;scale:.94}}
+/* slide 17: closing */
+.closeBottom .pill{transition:background .3s,border-color .3s,transform .35s var(--ease)}
+.closeBottom .pill:hover{background:#caff6a22;border-color:var(--lime);transform:translateY(-5px)}
+/* chrome */
+.progress>i{transition:width .7s var(--ease);box-shadow:0 0 10px var(--lime)}
+.progress>i::after{content:"";position:absolute;right:0;top:-3px;width:40px;height:8px;background:radial-gradient(closest-side,#fff,transparent);opacity:.8}
+.slideNumber.tick,#chapter.swap{animation:tick .5s var(--ease)}
+@keyframes tick{from{opacity:0;translate:0 8px}}
+.navbtn,.utility{transition:background .2s,border-color .2s,transform .15s}
+.navbtn:active,.utility:active{transform:scale(.92)}
+.help{animation:dimHelp 1.2s ease 6s both}@keyframes dimHelp{to{opacity:0}}
+.outlineOverlay.open{animation:ovIn .4s var(--ease) both}@keyframes ovIn{from{opacity:0}}
+.outlineOverlay.open .outlineItem{animation:rvUp .55s var(--ease) calc(.08s + var(--i,0) * 28ms) both}
+.outlineItem{transition:transform .3s var(--ease),border-color .3s,background .3s}.outlineItem:hover{transform:translateY(-4px);border-color:var(--lime)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+/* ===== Clarity slide ===== */
+.clarityLayout{display:grid;grid-template-columns:240px 1fr 330px;gap:30px;margin-top:30px;align-items:start}
+.clarityPhone{position:relative;width:240px;height:420px;border:10px solid #31423c;border-radius:34px;background:#10201f;box-shadow:0 0 0 1px #98b59e66,0 20px 60px #0008;overflow:visible}
+.clarityPhone svg{display:block;width:220px;height:400px;border-radius:24px}
+.cMark{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:var(--lime);color:#14200f;font-size:13px;font-weight:900;display:grid;place-items:center;box-shadow:0 0 0 4px #caff6a33,0 6px 16px #0008;transition:transform .35s var(--spring),box-shadow .35s;z-index:3}
+.clarityList{display:flex;flex-direction:column;gap:12px}
+.cRow{display:flex;gap:18px;align-items:flex-start;border:1px solid #3f4f4b;background:#ffffff07;border-radius:14px;padding:17px 20px;transition:border-color .3s,background .3s,transform .35s var(--ease)}
+.cRow:hover{border-color:#caff6a80;background:#caff6a0b;transform:translateX(6px)}
+.cNum{flex:none;width:34px;height:34px;border-radius:50%;border:1px solid var(--lime);color:var(--lime);display:grid;place-items:center;font-weight:800;font-size:16px}
+.cRow h3{font-size:22px}.cRow p{font-size:16.5px;line-height:1.45;margin-top:6px}
+.clarityTests{display:flex;flex-direction:column;gap:12px}
+.testCard{border:1px solid #4d6455;background:#182322;border-radius:16px;padding:18px 20px;transition:transform .4s var(--ease),border-color .3s}
+.testCard:hover{transform:translateY(-4px);border-color:#caff6a8c}
+.testCard b{display:block;font-size:20px;margin-top:8px;letter-spacing:-.01em}.testCard p{font-size:15.5px;line-height:1.45;margin-top:6px}
+.clarityLayout:has(.cRow[data-m="1"]:hover) .m1,.clarityLayout:has(.cRow[data-m="2"]:hover) .m2,.clarityLayout:has(.cRow[data-m="3"]:hover) .m3,.clarityLayout:has(.cRow[data-m="4"]:hover) .m4{transform:scale(1.45);box-shadow:0 0 0 8px #caff6a40,0 0 30px #caff6a}
+.slide.active .clarityPhone .focus{animation:focusRing 1.8s ease-out infinite}
+@keyframes focusRing{from{transform:scale(1);opacity:.9}to{transform:scale(2.1);opacity:0}}
+.slide.active .clarityPhone .enemy{animation:patrol 2.6s ease-in-out infinite alternate}
+@keyframes patrol{from{transform:translateX(-46px)}to{transform:translateX(46px)}}
+.slide.active .clarityPhone .goal{animation:twinkle 2.4s ease-in-out infinite}
+@keyframes twinkle{50%{transform:scale(1.18) rotate(18deg)}}
+.slide.active .clarityPhone .aim{animation:march 1.2s linear infinite}
+.slide.active .clarityPhone .finger{animation:drag 2.4s cubic-bezier(.6,0,.3,1) infinite}
+@keyframes drag{0%,15%{transform:translate(0,0);opacity:0}25%{opacity:1}65%{transform:translate(18px,-70px);opacity:1}80%,100%{transform:translate(18px,-70px);opacity:0}}
+.slide.active .clarityPhone .fill{animation:fillBar 4s var(--ease) 1s infinite}
+@keyframes fillBar{0%{transform:scaleX(.35)}60%,100%{transform:scaleX(.62)}}
+.clarityPhone svg *{transform-box:fill-box;transform-origin:center}.clarityPhone .fill{transform-origin:left center}
+/* ===== Game feel slide ===== */
+.feelGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+.feel{display:grid;grid-template-columns:124px 1fr;gap:18px;align-items:center;border:1px solid #40504d;background:linear-gradient(135deg,#1b2228de,#141a1fbe);border-radius:18px;padding:14px 18px 14px 14px;height:154px;position:relative;transition:transform .45s var(--ease),border-color .3s,box-shadow .45s var(--ease)}
+.feel:hover{transform:translateY(-5px);border-color:#caff6a8c;box-shadow:0 22px 50px #000a}
+.feel h3{font-size:21px}.feel p{font-size:16px;line-height:1.45;margin-top:7px}
+.feelDemo{position:relative;width:124px;height:124px;border-radius:14px;background:radial-gradient(circle at 50% 45%,#273a33,#0e1719 75%);border:1px solid #ffffff14;overflow:hidden}
+.feelDemo i{position:absolute;display:block}
+.feelDemo .c{inset:0;margin:auto}
+/* tap */
+.d-tap .btn{width:54px;height:54px;border-radius:50%;background:var(--lime);box-shadow:0 0 24px #caff6a66}
+.d-tap .ring{width:54px;height:54px;border-radius:50%;border:2px solid var(--lime);opacity:0}
+.d-tap .finger{width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 4px 12px #0009;opacity:0}
+.slide.active .d-tap .btn{animation:tapBtn 1.8s var(--ease) infinite}
+.slide.active .d-tap .ring{animation:tapRing 1.8s ease-out infinite}
+.slide.active .d-tap .finger{animation:tapFinger 1.8s var(--ease) infinite}
+@keyframes tapBtn{0%,32%{transform:scale(1)}38%{transform:scale(.82)}48%{transform:scale(1.12)}58%,100%{transform:scale(1)}}
+@keyframes tapRing{0%,36%{transform:scale(.8);opacity:0}38%{opacity:.9}75%,100%{transform:scale(2.1);opacity:0}}
+@keyframes tapFinger{0%{transform:translate(36px,40px);opacity:0}25%{transform:translate(6px,8px);opacity:1}38%{transform:translate(6px,8px) scale(.8)}48%{transform:translate(6px,8px) scale(1);opacity:1}75%,100%{transform:translate(36px,40px);opacity:0}}
+/* squash */
+.d-squash .floor{left:18px;right:18px;bottom:24px;height:2px;background:#ffffff40;border-radius:2px}
+.d-squash .ball{width:32px;height:32px;left:calc(50% - 16px);bottom:26px;border-radius:50%;background:var(--orange);box-shadow:inset -5px -6px 0 #0002;transform-origin:50% 100%}
+.slide.active .d-squash .ball{animation:squash 1.15s infinite}
+@keyframes squash{0%{transform:translateY(-62px) scale(.95,1.05);animation-timing-function:cubic-bezier(.5,0,1,.7)}42%{transform:translateY(0) scale(.86,1.16);animation-timing-function:ease-out}52%{transform:translateY(0) scale(1.4,.62);animation-timing-function:cubic-bezier(.2,.8,.4,1)}64%{transform:translateY(-6px) scale(.88,1.14);animation-timing-function:cubic-bezier(0,.4,.5,1)}100%{transform:translateY(-62px) scale(.95,1.05)}}
+/* burst */
+.d-burst .core{width:26px;height:26px;border-radius:50%;background:var(--lime)}
+.d-burst .p{width:9px;height:9px;border-radius:50%;left:calc(50% - 4.5px);top:calc(50% - 4.5px);background:var(--lime);opacity:0}
+.d-burst .p:nth-of-type(3n){background:var(--orange)}.d-burst .p:nth-of-type(3n+1){background:var(--purple)}.d-burst .p:nth-of-type(4n){background:var(--teal)}
+.slide.active .d-burst .core{animation:core 1.6s var(--ease) infinite}
+.slide.active .d-burst .p{animation:part 1.6s cubic-bezier(.1,.8,.3,1) infinite}
+@keyframes core{0%{transform:scale(.5)}8%{transform:scale(1.45);box-shadow:0 0 40px 10px #caff6a88}30%,100%{transform:scale(1);box-shadow:0 0 0 0 transparent}}
+@keyframes part{0%{transform:rotate(var(--a)) translateX(0) scale(1.2);opacity:1}55%{opacity:.9}70%,100%{transform:rotate(var(--a)) translateX(50px) scale(.2);opacity:0}}
+/* easing */
+.d-ease span{position:absolute;left:14px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#93a39c;font-weight:800}
+.d-ease span:nth-of-type(1){top:20px}.d-ease span:nth-of-type(2){top:70px;color:var(--lime)}
+.d-ease .t{left:14px;right:14px;height:2px;background:#ffffff1c;border-radius:2px}.d-ease .t1{top:48px}.d-ease .t2{top:98px}
+.d-ease .a,.d-ease .b{width:16px;height:16px;border-radius:50%;left:14px}
+.d-ease .a{top:41px;background:#8a9893}.d-ease .b{top:91px;background:var(--lime);box-shadow:0 0 14px #caff6a88}
+.slide.active .d-ease .a{animation:moveX 1.5s linear infinite alternate}
+.slide.active .d-ease .b{animation:moveX 1.5s cubic-bezier(.34,1.7,.64,1) infinite alternate}
+@keyframes moveX{0%,8%{transform:translateX(0)}92%,100%{transform:translateX(80px)}}
+/* counter */
+@property --n{syntax:"<integer>";inherits:false;initial-value:1250}
+.d-count b{position:absolute;left:0;right:0;top:20px;text-align:center;font-size:26px;font-weight:900;color:#fff;font-family:"Inter Tight","Inter",sans-serif;font-variant-numeric:tabular-nums;--n:1250;counter-reset:n var(--n)}
+.d-count b::after{content:counter(n)}
+.d-count .coin{width:16px;height:16px;border-radius:50%;background:#ffd25e;box-shadow:inset -3px -3px 0 #c9902a,0 0 10px #ffd25e88;left:20px;bottom:18px;opacity:0}
+.d-count em{position:absolute;right:12px;top:54px;font-style:normal;font-weight:900;font-size:15px;color:var(--lime);opacity:0}
+.slide.active .d-count b{animation:countUp 2.4s steps(30) infinite,bumpN 2.4s var(--spring) infinite}
+.slide.active .d-count .coin{animation:coinFly 2.4s cubic-bezier(.5,0,.3,1) infinite}
+.slide.active .d-count .coin:nth-of-type(2){animation-delay:.18s}.slide.active .d-count .coin:nth-of-type(3){animation-delay:.36s}
+.slide.active .d-count em{animation:plus 2.4s var(--ease) .5s infinite}
+@keyframes countUp{0%,25%{--n:1250}70%,100%{--n:1280}}
+@keyframes bumpN{0%,30%,100%{transform:scale(1)}40%{transform:scale(1.22);color:var(--lime)}55%{transform:scale(1)}}
+@keyframes coinFly{0%{transform:translate(0,0) scale(.6);opacity:0}8%{opacity:1}38%{transform:translate(32px,-62px) scale(1);opacity:1}42%,100%{transform:translate(32px,-62px) scale(.3);opacity:0}}
+@keyframes plus{0%{transform:translateY(8px);opacity:0}15%{transform:translateY(0);opacity:1}45%{opacity:1}60%,100%{transform:translateY(-16px);opacity:0}}
+/* hit-stop + shake */
+.d-shake .box{width:46px;height:46px;border-radius:10px;background:var(--orange);left:calc(50% + 4px);top:calc(50% - 23px);overflow:hidden}
+.d-shake .box::after{content:"";position:absolute;inset:0;background:#fff;opacity:0}
+.d-shake .shot{width:14px;height:14px;border-radius:50%;background:var(--lime);box-shadow:0 0 12px var(--lime);left:14px;top:calc(50% - 7px)}
+.slide.active .d-shake .shot{animation:shot 1.8s infinite}
+.slide.active .d-shake .box{animation:shake 1.8s infinite}
+.slide.active .d-shake .box::after{animation:flash 1.8s infinite}
+@keyframes shot{0%{transform:translateX(0);opacity:0;animation-timing-function:cubic-bezier(.6,0,1,1)}5%{opacity:1}30%,40%{transform:translateX(34px);opacity:1}41%,100%{transform:translateX(34px);opacity:0}}
+@keyframes shake{0%,40%{transform:none}43%{transform:translate(5px,-3px) rotate(4deg)}47%{transform:translate(-4px,3px) rotate(-3deg)}51%{transform:translate(3px,1px) rotate(2deg)}55%{transform:translate(-2px,-1px)}60%,100%{transform:none}}
+@keyframes flash{0%,29%{opacity:0}30%,40%{opacity:1}48%,100%{opacity:0}}
+/* ===== Emoji ===== */
+.emo{display:inline-block;margin-right:.34em;font-size:.92em;line-height:1;font-style:normal;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;transform-origin:50% 85%;transition:transform .45s var(--spring);filter:drop-shadow(0 3px 6px #0006)}
+.eyebrow .emo,.pill .emo,.heroGraphic .node .emo{font-size:1.15em;vertical-align:-.1em}
+.slide.active .emo{animation:emoPop .7s var(--spring) calc(var(--d,0s) + .3s) both}
+@keyframes emoPop{from{opacity:0;scale:0;rotate:-30deg}to{opacity:1;scale:1;rotate:0deg}}
+:is(.panel,.flowBlock,.beat,.hook,.feel,.cRow,.testCard,.procStep,.lever,.lvCard,.toolCard,.pipeItem,.feedNode,.filter,.qaItem,.level,.matrix>div,.mediaCard,.galleryCard,.pill,.node,.log):hover .emo{transform:rotate(-14deg) scale(1.3)}
+.qaItem:has(input:checked) .emo{transform:scale(1.2)}
+/* ===== Process slides ===== */
+.procSteps{display:grid;grid-template-columns:1fr 30px 1fr 30px 1fr 30px 1fr;align-items:stretch;margin-top:28px}
+.procStep{position:relative;border:1px solid #42504e;background:#171f23;border-radius:16px;padding:18px 20px;transition:transform .45s var(--ease),border-color .3s,box-shadow .45s var(--ease)}
+.procStep:hover{transform:translateY(-5px);border-color:#caff6a8c;box-shadow:0 22px 50px #000a}
+.procStep.key{background:linear-gradient(140deg,#28402e,#1b2926);border-color:#7b9c5b}
+.procStep.key::before{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;box-shadow:0 0 0 1px #caff6a,0 0 40px #caff6a40;opacity:0}
+.slide.active .procStep.key::before{animation:breathe 2.8s ease-in-out 1.8s infinite}
+.procNum{font-family:"Inter Tight","Inter",sans-serif;font-size:13px;font-weight:800;letter-spacing:.15em;color:var(--lime)}
+.procStep h3{font-size:22px;margin-top:10px}.procStep p{font-size:15.5px;line-height:1.45;color:var(--body);margin-top:8px}
+.procArrow{align-self:center;text-align:center;font-style:normal;font-size:22px;color:var(--lime)}
+.slide.active .procArrow.rv{animation:rvPop .6s var(--spring) var(--d) both}
+.kickoff{display:grid;grid-template-columns:1.05fr 1fr;gap:34px;margin-top:16px;border:1px solid #4d6455;background:#182322;border-radius:19px;padding:22px 26px}
+.kGroups{display:flex;align-items:flex-end;gap:22px;margin-top:18px}
+.kLabel{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);font-weight:700;margin-bottom:12px}
+.kPeople{display:flex;gap:14px}
+.kP{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:14px;font-weight:700;color:#e4ece7;width:76px;text-align:center}
+.kAv{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;font-size:28px;background:radial-gradient(circle at 40% 35%,#35503f,#1b2a26);border:1px solid #6d8a6a;box-shadow:0 8px 20px #0007;transition:transform .4s var(--spring),border-color .3s}
+.kP:hover .kAv{transform:scale(1.15) rotate(-8deg);border-color:var(--lime)}
+.kGroup:last-child .kAv{border-color:#a8a0ff99;background:radial-gradient(circle at 40% 35%,#3b3a5c,#1c1f2c)}
+.slide.active .kAv{animation:avBob 3s ease-in-out infinite alternate}
+.slide.active .kP:nth-child(2) .kAv{animation-delay:-.7s}.slide.active .kP:nth-child(3) .kAv{animation-delay:-1.4s}
+@keyframes avBob{to{translate:0 -5px}}
+.kPlus{font-size:28px;color:var(--lime);font-weight:800;padding-bottom:44px}
+.kAgenda{display:flex;flex-direction:column;gap:2px}
+.kItem{display:flex;gap:14px;align-items:flex-start;padding:8px 0;border-top:1px solid #ffffff14}
+.kAgenda .eyebrow+.kItem{border-top:0}
+.kTick{flex:none;width:28px;height:28px;border-radius:50%;background:var(--lime);color:#14200f;font-weight:900;font-size:14px;display:grid;place-items:center}
+.kItem b{display:block;font-size:18px}.kItem span:not(.kTick){display:block;font-size:15px;color:var(--body);margin-top:3px}
+.lvLayout{display:grid;grid-template-columns:600px 1fr;gap:26px;margin-top:28px}
+.lvCompare{display:grid;grid-template-columns:1fr 78px 1fr;align-items:center}
+.lvCard{border:1px solid #42504e;background:#161d22;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;height:340px;position:relative;transition:transform .45s var(--ease)}
+.lvCard.old .mock,.lvCard.old .lvTag{filter:saturate(.2);opacity:.7}
+.lvCard.new{border-color:#9bc66a;background:linear-gradient(150deg,#22382b,#141c1f);box-shadow:0 0 50px #caff6a26}
+.lvCard.new .eyebrow{color:var(--lime)}
+.lvCard:hover{transform:translateY(-5px)}
+.mock{position:relative;flex:1;border-radius:13px;overflow:hidden;background:#1d2628}
+.mock i{position:absolute;display:block;font-style:normal}
+.mock .m-hud{left:14px;right:14px;top:14px;height:9px;border-radius:5px;background:#ffffff1a;overflow:hidden}
+.mock .m-hud i{left:0;top:0;bottom:0;width:45%;background:#7d8a86;border-radius:5px}
+.mock .m-obj{width:44px;height:30px;border-radius:7px;background:#5d6865;left:calc(50% - 22px);top:80px}
+.mock .m-hero{width:38px;height:38px;border-radius:50%;background:#9aa5a1;left:calc(50% - 19px);top:150px}
+.mock .m-cta{left:22px;right:22px;bottom:14px;height:26px;border-radius:8px;background:#5d6865}
+.new .mock{background:radial-gradient(circle at 50% 40%,#2f5a4b,#11201f 75%)}
+.new .mock .m-hud i{background:var(--lime);box-shadow:0 0 10px var(--lime)}
+.new .mock .m-obj{background:var(--orange);box-shadow:0 0 22px #ff987c88}
+.new .mock .m-hero{background:#fff;box-shadow:0 0 0 5px #caff6a55,0 0 26px #caff6a88}
+.new .mock .m-cta{background:var(--lime);box-shadow:0 0 22px #caff6a66;overflow:hidden}
+.new .mock .m-cta::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,#ffffffb0 50%,transparent 70%);translate:-120% 0}
+.mock .spark{color:var(--lime);font-size:16px;opacity:0}
+.mock .s1{left:26px;top:60px}.mock .s2{right:24px;top:118px;color:var(--orange)}.mock .s3{left:40px;top:170px;color:var(--purple)}
+.slide.active .new .mock .m-hero{animation:svgBob 1.4s ease-in-out infinite alternate}
+.slide.active .new .mock .m-obj{animation:patrol 2.2s ease-in-out infinite alternate}
+.slide.active .new .mock .m-cta::after{animation:sweep 2.6s ease-in-out 1.5s infinite}
+.slide.active .new .mock .m-hud i{animation:fillBar 3.5s var(--ease) 1s infinite}
+.mock .m-hud i{transform-origin:left}
+.slide.active .mock .spark{animation:sparkle 1.8s ease-in-out infinite}
+.slide.active .mock .s2{animation-delay:.6s}.slide.active .mock .s3{animation-delay:1.2s}
+@keyframes sparkle{0%,100%{opacity:0;scale:.4;rotate:0deg}50%{opacity:1;scale:1.2;rotate:90deg}}
+.lvTag{align-self:flex-start;font-size:12px;font-weight:900;letter-spacing:.12em;padding:6px 11px;border-radius:100px;border:1px solid #5a6c5d;color:#bdc9c5;background:#ffffff0b}
+.new .lvTag{color:#14200f;background:var(--lime);border-color:var(--lime)}
+.lvArrow{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--lime)}
+.lvArrow span{font-size:34px;line-height:1;display:inline-block;rotate:90deg}
+.lvArrow b{font-size:11px;letter-spacing:.14em;text-align:center;line-height:1.3}
+.slide.active .lvArrow span{animation:lvNudge 1.3s ease-in-out infinite}
+@keyframes lvNudge{50%{translate:7px 0;text-shadow:0 0 18px var(--lime)}}
+.lvLevers{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start}
+.lever{border:1px solid #40504d;background:linear-gradient(135deg,#1b2228de,#141a1fbe);border-radius:15px;padding:16px 18px;height:105px;position:relative;transition:transform .45s var(--ease),border-color .3s}
+.lever:hover{transform:translateY(-4px);border-color:#caff6a8c}
+.lever h3{font-size:20px}.lever p{font-size:15px;line-height:1.4;color:var(--body);margin-top:6px}
+.lvLayout+.noteStrip{margin-top:22px}
+/* ===== Round 5 edits ===== */
+.procStep::after{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;border:1px solid var(--lime);background:linear-gradient(140deg,#caff6a14,transparent 70%);box-shadow:0 0 36px #caff6a40,inset 0 0 40px #caff6a10;opacity:0}
+.slide.active .procStep::after{animation:seq4 4.8s ease-in-out 1.4s infinite}
+.slide.active .procStep:nth-of-type(2)::after{animation-delay:2.6s}.slide.active .procStep:nth-of-type(3)::after{animation-delay:3.8s}.slide.active .procStep:nth-of-type(4)::after{animation-delay:5s}
+.grid.four .panel{height:340px!important;display:flex;flex-direction:column}
+.grid.four .panel .cardIcon{font-size:32px;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.grid.four .panel h3{font-size:23px;white-space:nowrap}
+.grid.four .panel .rule{margin-top:auto}
+.chip.inhouse{position:absolute;top:26px;right:24px;font-size:11px;padding:5px 9px}
+.beat:nth-child(1),.beat:nth-child(4){border-color:#42504e}
+.clarityLayout{grid-template-columns:240px 1fr;gap:40px}.cRow h3{font-size:24px}.cRow p{font-size:17px}
+.slide.active .toolCard:nth-child(3) .ic,.slide.active .toolCard:nth-child(5) .ic{animation:floatY 3s ease-in-out infinite alternate}
+.slide.active .toolCard:nth-child(1) .ic,.slide.active .toolCard:nth-child(4) .ic{animation:spin 10s linear infinite}
+.toolCard h3{font-size:21px;white-space:nowrap}
+.procStep.key{background:linear-gradient(140deg,#2d4a31,#1b2926);border-color:var(--lime);box-shadow:0 0 0 1px #caff6a55,0 18px 50px #caff6a1f}
+.procStep.key .procNum::after{content:"PROJECT START";margin-left:10px;padding:3px 8px;border-radius:100px;background:var(--lime);color:#14200f;font-size:10px;letter-spacing:.1em}
+.procStep.key h3{color:var(--lime)}
+/* ===== Typography & readability ===== */
+:root{--body:#c8d2cd;--soft:#a5b3ad}
+html,body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-optical-sizing:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+h1,h2,h3,.closeTitle,.bigNo,.beatnum,.pipeItem .id,.badgeNumber,.brand,.readyToast,.cNum{font-family:"Inter Tight","Inter",system-ui,sans-serif}
+h1{font-weight:800;letter-spacing:-.045em;line-height:.98}
+h2{font-weight:800;letter-spacing:-.035em;line-height:1.06}
+h3{font-weight:700;letter-spacing:-.02em;line-height:1.18}
+.closeTitle{font-weight:800;letter-spacing:-.045em;line-height:1}
+.bigNo{font-weight:800;letter-spacing:-.035em}
+.lead,.heroGrid .lede{color:#cad4cf;line-height:1.5}
+.panel p,.flowBlock p,.beat p,.hook p,.mediaCard p,.toolCard p,.pipeItem p,.ladder .aside p,.feedNode p,.galleryCard p,.rule,.filter span,.matrix li,.checkRow,.level small,.qaItem small,.noteStrip,.feel p,.cRow p,.testCard p{color:var(--body)}
+.panel p{line-height:1.5}
+.eyebrow{font-size:13px;color:#aab8b2}.kicker em{color:#b8c4bf}
+.tiny{font-size:13.5px;color:var(--soft)}.sourceFoot{font-size:13.5px}
+.micro span{font-size:13px}.placeholder small{font-size:13px}
+.hook p{font-size:16px;line-height:1.4}
+.beat p{font-size:17px;line-height:1.45}
+.filter span{font-size:17px}
+.checkRow{font-size:16px}
+.pipeItem p{font-size:16px;line-height:1.42}
+.level small{font-size:15px;line-height:1.35}
+.feedNode p{font-size:15px}
+.qaItem strong{font-size:18px}.qaItem small{font-size:14.5px;line-height:1.4}
+.specTable th{font-size:13px;color:#bccac4}.specTable td{color:#e0e8e2}
+.noteStrip{font-size:16px}
+.galleryCard p{font-size:14px;line-height:1.4}
+.panel .cardIcon{height:36px;line-height:36px}
+.closeBottom{bottom:92px}
+/* spacing fixes: keep content clear of the bottom bar */
+.clarityLayout{margin-top:24px}.clarityList,.clarityTests{gap:10px}.cRow{padding:13px 20px}
+.ctaLayout{margin-top:20px}.ctaLayout>div:first-child{padding-top:0!important}
+.feedback{margin-top:22px}.feedTimeline{gap:10px}.feedNode{padding:11px 18px}.feedNode p{margin-top:3px}
+.log{padding:22px 24px}.log h3{font-size:25px}.log .paperRow{margin-top:14px;padding-bottom:10px}.log .suggested{margin-top:14px}
+.matrix{margin-top:26px}.matrix h3{margin-bottom:16px}.matrix li{padding:13px 0}
+@media print{.slide *,.slide *::before,.slide *::after{animation:none!important}.fx-glow{display:none!important}.heroGraphic,.ctaPhone{transform:none!important}}
+
+/* Video slides */
+.pairCard{grid-template-columns:186px 186px 1fr!important;gap:14px!important}
+.pairCard h3{font-size:22px!important;margin:16px 0 4px!important;white-space:nowrap}
+.pairCard .checkList{gap:10px;margin-top:16px}.pairCard .checkRow{font-size:14px}
+.slotTag{position:absolute;top:9px;left:9px;z-index:2;font:800 10px/1 Inter,sans-serif;letter-spacing:.08em;padding:5px 7px;border-radius:5px;pointer-events:none}
+.slotTag.them{background:#0c161dcc;color:#c3cdc8;border:1px solid #ffffff30}
+.slotTag.us{background:var(--lime);color:#0c161d}
+.mediaSlot.hasVideo{border-style:solid;border-color:#4b5b56}
+.pairCard .mediaSlot:has(.us){border-color:#caff6a88}
+.gallery{grid-template-columns:repeat(2,1fr)!important;gap:26px!important}
+.galleryCard{grid-template-rows:none!important;grid-template-columns:253px 1fr;height:450px!important}
+.galleryCard .galleryCaption{padding:30px 28px!important;display:flex;flex-direction:column}
+.galleryCard h3{font-size:24px!important}.galleryCard p{font-size:16px!important;margin-top:12px!important}
+.galleryCard .checkList{margin-top:auto}
+.mediaSlot.hasVideo .uploadBadge{top:9px;right:9px;bottom:auto;opacity:0;transition:opacity .25s}.mediaSlot.hasVideo:hover .uploadBadge{opacity:1}
+.galleryCard{height:430px!important}
+
+/* Video slides 2 */
+.trioGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:26px}
+.trioCard{background:#161d23;border:1px solid #4b5b56;border-radius:22px;padding:16px;position:relative;transition:transform .45s var(--ease),border-color .3s,box-shadow .45s var(--ease)}
+.trioCard:hover{transform:translateY(-6px);border-color:#caff6a8c;box-shadow:0 24px 60px #000a}
+.trioHead{display:flex;align-items:center;gap:12px}.trioHead h3{font-size:21px;white-space:nowrap}
+.trioVids{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.trioVids .mediaSlot{height:318px}.trioVids .mediaSlot:has(.us){border-color:#caff6a88}
+.trioNote{font-size:14px;color:var(--body);margin-top:12px;line-height:1.35}
+.proofLayout{display:grid;grid-template-columns:auto 1fr;gap:44px;margin-top:30px;align-items:center}
+.proofRow{display:flex;align-items:center;gap:12px}
+.proofStep{width:204px}.proofStep .mediaSlot{height:362px;border-color:#caff6a88}
+.proofStep:first-child .mediaSlot{border-color:var(--lime);box-shadow:0 0 0 1px #caff6a55,0 18px 50px #caff6a26}
+.proofStep p{font-size:14px;color:var(--body);margin-top:10px;text-align:center}.proofStep p b{display:block;color:#fff;font-size:16px}
+.proofArrow{font-size:26px;color:var(--lime);margin-top:-40px}
+.proofStats{display:grid;gap:18px}
+.statBig{background:#161d23;border:1px solid #4b5b56;border-radius:20px;padding:20px 24px;display:grid;grid-template-columns:auto 1fr;column-gap:16px;align-items:center}
+.statBig .emo{grid-row:span 2;font-size:34px}
+.statBig strong{font-family:"Inter Tight",Inter,sans-serif;font-size:56px;line-height:1;color:var(--lime);letter-spacing:-.03em}
+.statBig small{font-size:15px;color:var(--body);margin-top:6px}
+.proofNote{font-size:16px;line-height:1.45;color:var(--body);padding:0 4px}
+.wallGrid{display:grid;justify-content:start;grid-template-columns:repeat(4,226px);gap:14px;margin-top:30px}
+.wallItem .mediaSlot{height:430px;border-color:#caff6a55}
+.wallItem .slotTag{font-size:9px}
+
+
+.topRow{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-top:20px;max-width:1120px}
+.topItem .mediaSlot{width:100%;aspect-ratio:388/850;height:auto}.topItem video{object-fit:cover}
+.topCap{margin-top:10px;display:flex;flex-direction:column;gap:2px}
+.topCap b{font-size:14px;color:#fff;line-height:1.2;min-height:2.4em}
+.topCap strong{font-family:"Inter Tight",Inter,sans-serif;font-size:32px;margin-top:4px;line-height:1;color:var(--lime);letter-spacing:-.03em}
+.topCap strong{display:flex;align-items:flex-end}
+.topCap .reel{display:inline-block;height:1.08em;overflow:hidden;line-height:1.08em}
+.topCap .strip{display:block;will-change:transform}.topCap .strip i{display:block;height:1.08em;font-style:normal;text-align:center}
+.topCap .rsuf{display:inline-block;line-height:1.08em;opacity:.35;transform:translateY(.15em);transition:opacity .3s,transform .4s var(--spring)}
+.topCap strong.rolled .rsuf{opacity:1;transform:none}
+.topCap strong.rolled{animation:rollPop .5s var(--spring)}
+@keyframes rollPop{40%{transform:scale(1.12);text-shadow:0 0 18px #caff6a99}100%{transform:none}}
+.topCap small{font-size:12px;color:var(--body)}
+.topItem.top1 .mediaSlot{box-shadow:0 0 0 2px var(--lime)}
+.poolLayout{display:grid;grid-template-columns:auto 1fr;gap:52px;margin-top:30px;align-items:center;max-width:1180px}.poolVid{display:flex;gap:16px}.poolVid .mediaSlot{width:224px}
+.poolVid .mediaSlot{height:440px;border-color:var(--lime);box-shadow:0 0 0 1px #caff6a55,0 18px 50px #caff6a26}
+.poolSide .statBig{max-width:520px}.poolSide .checkList{margin-top:30px;gap:16px}.poolSide .checkRow{font-size:19px}
+
+/* Best practices + platform */
+.expLead{font-size:17px!important;max-width:1100px;margin-top:10px!important}.expCaption.rv{animation-duration:1.1s}.expCaption{margin:26px 0 0;font-size:22px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.expCards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px}
+.expCard{--c:var(--lime);position:relative;overflow:hidden;background:linear-gradient(135deg,color-mix(in srgb,var(--c) 14%,#161d23),#161d23 60%);border:1px solid color-mix(in srgb,var(--c) 45%,#2c3833);border-radius:16px;padding:10px 16px;display:flex;gap:12px;align-items:center}
+.expCard.c1{--c:#b18cff}.expCard.c2{--c:#ffb648}.expCard.c3{--c:#caff6a}.expCard.c4{--c:#5ad8ff}
+.expCard::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,color-mix(in srgb,var(--c) 22%,transparent) 50%,transparent 70%);transform:translateX(-120%)}
+.slide.active .expCard::after{animation:expShine 1.6s ease calc(var(--d,0s) + .6s) 1}
+@keyframes expShine{to{transform:translateX(120%)}}
+.expIco{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 22%,transparent);box-shadow:0 0 18px color-mix(in srgb,var(--c) 35%,transparent);flex-shrink:0}
+.expIco .emo{font-size:21px}
+.expCard b{display:block;font-size:16px;color:#fff}.expCard small{display:block;font-size:13px;color:var(--body);margin-top:3px;line-height:1.3}
+.expTable{width:100%;border-collapse:separate;border-spacing:0;margin-top:6px;font-size:13px}
+.expTable th{text-align:left;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:#b0bfba;padding:8px 10px;border-bottom:2px solid #3a4742;white-space:nowrap}
+.expTable th[class]{border-bottom-color:var(--hc)}
+.hTap{--hc:#caff6a}.hTime{--hc:#5ad8ff}.hAlt{--hc:#b18cff}.hTut{--hc:#7be3a1}.hCond{--hc:#ff7a8a}.hDiff{--hc:#ffb648}
+.expTable td{padding:4px 10px;border-bottom:1px solid #26312d;white-space:nowrap;height:30px}
+.expTable td.g{color:#fff;font-weight:600;font-size:14px}.gEmo{display:inline-block;width:24px}
+.expTable tbody tr{transition:background .25s}.expTable tbody tr:hover{background:#caff6a0d}
+.hNum{--hc:#5ad8ff}
+.expTable td.num{position:relative;width:110px;padding-right:14px}
+.expTable td.num b{position:relative;font-size:14px;color:#5ad8ff;font-weight:700}
+.nBar{position:absolute;left:6px;top:50%;height:18px;margin-top:-9px;width:calc((100% - 20px) * var(--w) / 100);border-radius:6px;background:linear-gradient(90deg,#5ad8ff33,#5ad8ff10);transform-origin:left;transform:scaleX(0)}
+.slide.active .expTable tr.rv .nBar{animation:nBar 1s var(--ease) calc(var(--d,0s) + .25s) both}
+@keyframes nBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.expTable td.num b{padding-left:4px}
+.xna{color:#4f5c57}
+.xp{--x:#caff6a;display:inline-block;min-width:24px;text-align:center;padding:2px 8px;margin-right:4px;border-radius:999px;font-size:12px;font-weight:600;color:var(--x);background:color-mix(in srgb,var(--x) 14%,transparent);border:1px solid color-mix(in srgb,var(--x) 45%,transparent)}
+.xTap{--x:#caff6a}.xTime{--x:#5ad8ff}.xAlt{--x:#b18cff}.xOn{--x:#7be3a1}.xOff{--x:#8a9893}.xWin{--x:#7be3a1}.xFail{--x:#ff7a8a}.xEasy{--x:#7be3a1}.xMed{--x:#ffb648}.xHard{--x:#ff6b6b}
+.slide.active .expTable tr.rv .xp{animation:xpIn .5s var(--spring) calc(var(--d,0s) + .3s + var(--k,0)*.06s) both}
+@keyframes xpIn{from{opacity:0;transform:scale(.4) translateY(6px)}to{opacity:1;transform:none}}
+.bpGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+.bpCard{position:relative;background:#161d23;border:1px solid #4b5b56;border-radius:22px;padding:24px 26px;height:430px;display:flex;flex-direction:column;transition:transform .45s var(--ease),border-color .3s,box-shadow .45s var(--ease)}
+.bpCard:hover{transform:translateY(-6px);border-color:#caff6a8c;box-shadow:0 24px 60px #000a}
+.bpCard:hover .emo{transform:rotate(-14deg) scale(1.3)}
+.bpIcon{width:54px;height:54px;border-radius:15px;background:#caff6a14;border:1px solid #caff6a44;display:grid;place-items:center;font-size:28px}
+.bpCard h3{font-size:25px;margin-top:16px}.bpSub{font-size:16px;color:var(--lime);margin-top:6px}
+.bpCard .checkList{margin-top:20px;gap:13px}.bpCard .checkRow{font-size:16px}
+.bpRule{margin-top:auto;padding-top:14px;border-top:1px solid #ffffff14;font-size:14px;color:#c3cdc8;font-style:italic}
+.bpHead{display:flex;align-items:center;gap:14px}
+.bpCard .bpHead h3{margin-top:0}
+.bpCard.hasVideo{padding:20px 22px}
+.bpInner{display:flex;gap:14px;height:100%}
+.bpInner .mediaSlot{width:190px;flex-shrink:0}
+.bpInner .mediaSlot video{object-fit:cover}
+.bpContent{display:flex;flex-direction:column;flex:1;min-width:0}
+.bpCard.hasVideo .bpHead{gap:12px}
+.bpCard.hasVideo .bpIcon{width:46px;height:46px;font-size:21px}
+.bpCard.hasVideo h3{font-size:20px}
+.bpCard.hasVideo .bpSub{font-size:14px;margin-top:3px}
+.bpCard.hasVideo .checkList{margin-top:14px;gap:9px}
+.bpCard.hasVideo .checkRow{font-size:14px}
+.bpCard.hasVideo .bpRule{font-size:12px;margin-top:auto;padding-top:8px}
+.platLayout{display:grid;grid-template-columns:420px 1fr;gap:28px;margin-top:30px}
+.platStats{display:grid;gap:16px}.platStats .statBig{padding:16px 22px}.platStats .statBig strong{font-size:48px}
+.askCard{position:relative;background:linear-gradient(140deg,#24382a,#161d23 60%);border:1px solid #caff6a66;border-radius:22px;padding:26px 30px;display:flex;flex-direction:column}
+.askCard h3{font-size:27px;margin-top:14px}.askCard>p{font-size:17px;color:var(--body);margin-top:8px;line-height:1.45}
+.askCard .checkList{margin-top:20px;gap:14px}.askCard .checkRow{font-size:17px}
+.askFoot{margin-top:auto;padding-top:14px;border-top:1px solid #ffffff14;font-size:16px;color:var(--lime);font-weight:700}
+
+.askCard .chip{align-self:flex-start}
+.wallRow{display:flex;gap:30px;align-items:stretch;margin-top:30px}.wallRow .wallGrid{margin-top:0!important}
+.wallSide{flex:1;background:#161d23;border:1px solid #4b5b56;border-radius:22px;padding:24px 24px;display:flex;flex-direction:column}
+.wallSide .chip{align-self:flex-start}.wallSide h3{font-size:22px;margin-top:14px;white-space:nowrap}
+.wallSide .checkList{margin-top:18px;gap:14px}.wallSide .checkRow{font-size:15px}
+.wallSide p{margin-top:auto;font-size:14px;color:var(--body);padding-top:12px;border-top:1px solid #ffffff14}
+
+/* Platform updates */
+.platLayout2{display:grid;grid-template-columns:1.7fr 1fr;gap:20px;margin-top:24px}
+.shipCard,.nextCard{position:relative;background:#161d23;border:1px solid #4b5b56;border-radius:22px;padding:20px 24px}
+.shipHead{display:flex;align-items:center;gap:14px}.shipHead h3{font-size:22px}
+.shipList{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;margin-top:14px}.shipList.one{grid-template-columns:1fr;margin-top:12px;gap:9px}
+.shipItem{display:flex;align-items:center;gap:10px;font-size:15px;line-height:1.3;color:var(--body);background:#ffffff06;border:1px solid #ffffff0d;border-radius:12px;padding:7px 11px;min-height:40px;white-space:nowrap}
+.shipItem .emo{font-size:18px;flex-shrink:0}
+.platSide{display:grid;grid-template-rows:auto 1fr;gap:16px}
+.platSide .askCard{padding:18px 22px}.platSide .askCard h3{font-size:21px;margin-top:10px}.platSide .askCard>p{font-size:15px;margin-top:6px}
+.nextCard .chip{align-self:flex-start}
+
+/* Platform tour */
+.shotGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
+.shot{position:relative;display:block;padding:0;border:1px solid #4b5b56;border-radius:16px;overflow:hidden;background:#0b0b0c;cursor:zoom-in;aspect-ratio:1511/812;transition:transform .45s var(--ease),border-color .3s,box-shadow .45s var(--ease)}
+.shot img{width:100%;height:100%;object-fit:cover;display:block}
+.shot:hover{transform:translateY(-6px) scale(1.02);border-color:#caff6a8c;box-shadow:0 24px 60px #000a;z-index:2}
+.shotCap{position:absolute;left:10px;bottom:10px;display:flex;align-items:center;gap:7px;background:#0c161de6;border:1px solid #caff6a55;color:#fff;font:700 13px/1 Inter,sans-serif;padding:7px 10px;border-radius:9px;text-align:left}
+.shotZoom{position:absolute;inset:0;z-index:50;background:#05080bf0;display:none;align-items:center;justify-content:center;padding:40px;cursor:zoom-out}
+.shotZoom.open{display:flex;animation:rvPop .35s var(--spring) both}
+.shotZoom img{max-width:100%;max-height:100%;border-radius:14px;border:1px solid #caff6a66;box-shadow:0 30px 90px #000}
+
+.bpCard.hasVideo{padding:18px 18px!important}.bpInner .mediaSlot{width:172px!important}
+.bpCard .bpHead{align-items:flex-start!important}.bpCard .bpHead .bpIcon{flex-shrink:0}.bpIcon .emo,.expIco .emo{margin:0!important;vertical-align:0!important;display:block;line-height:1;text-align:center}
+.bpCard.hasVideo h3{font-size:19px!important;white-space:nowrap}
+</style>
+</head>
+<body><main id="stage">
+<div class="topbar"><div class="brand">24<b>PLAY</b> <span style="font-size:12px;color:#93a69a;font-weight:500;letter-spacing:.08em;margin-left:12px">CREATIVE SYSTEMS</span></div><div class="topright"><span id="chapter">PARTNER PRESENTATION</span><span style="height:18px;width:1px;background:#50605c"></span><span>2026</span></div></div>
+
+<section class="slide active" data-chapter="Overview" data-short="Why this matters">
+  <div class="heroGrid"><div><div class="kicker">Partner presentation <em>01 / Creative → Delivery</em></div><h1>Better<br/><span class="accent">playables.</span><br/>Ready to ship.</h1><p class="lede">How we turn partners’ ideas into more engaging playable experiences.</p><div class="micro" style="margin-top:45px"><span>IDEATION BEST PRACTICES</span><span>EXPORT BEST PRACTICES</span></div></div>
+  <div class="heroGraphic"><div class="orbit"></div><div class="orbit a"></div><div class="orbit b"></div><div class="bigMark">↗</div><div class="node n1"><span class="emo">💡</span>01 — INSIGHT</div><div class="node n2"><span class="emo">👆</span>02 — INTERACTION</div><div class="node n3"><span class="emo">🚀</span>03 — DELIVERY</div><div class="node n4"><span class="emo">🎮</span>PLAYABLE SYSTEMS</div></div></div>
+</section>
+
+<section class="slide" data-chapter="Proof" data-short="Top spenders">
+<div class="kicker">Proof <em>/ Last 30 days</em></div><h2>80M impressions in 30 days. <span class="accent">Top 6 playables.</span></h2>
+<div class="topRow"><div class="topItem top1"><div class="mediaSlot" data-media="top_1" data-default="media/top_1.mp4?v=4"><video muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">#1</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div class="topCap"><b>🧩 Puzzle Page</b><strong>32M</strong><small>impressions</small></div></div><div class="topItem"><div class="mediaSlot" data-media="top_5" data-default="media/top_5.mp4?v=4"><video muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">#2</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div class="topCap"><b>🦆 Duckies Pop</b><strong>19M</strong><small>impressions</small></div></div><div class="topItem"><div class="mediaSlot" data-media="top_3" data-default="media/top_3.mp4?v=4"><video muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">#3</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div class="topCap"><b>🧱 Tetris Block Party</b><strong>14M</strong><small>impressions</small></div></div><div class="topItem"><div class="mediaSlot" data-media="top_4" data-default="media/top_4.mp4?v=4"><video muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">#4</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div class="topCap"><b>✏️ Picture Cross</b><strong>12M</strong><small>impressions</small></div></div><div class="topItem"><div class="mediaSlot" data-media="top_2" data-default="media/top_2.mp4?v=4"><video muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">#5</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div class="topCap"><b>🫧 Moonsters Bubble Battles</b><strong>2M</strong><small>impressions</small></div></div><div class="topItem"><div class="mediaSlot" data-media="top_6" data-default="media/top_6.mp4?v=4"><video muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">#6</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div class="topCap"><b>⚽ Goal Battle</b><strong>900K</strong><small>impressions</small></div></div></div>
+</section>
+
+<section class="slide-cut" hidden data-chapter="Ideation" data-short="Brief-led ideation">
+ <div class="kicker">Ideation best practices <em>/ The starting point</em></div><h2>We don't need to invent<br/>the brief to <span class="accent">improve the idea.</span></h2>
+ <p class="lead">Partners bring the game, audience and creative direction. Our value is translating that direction into an interaction that works in a few seconds.</p>
+ <div class="s2flow"><div class="flowBlock"><div class="eyebrow"><span class="emo">📋</span>Partner input</div><div class="bigNo">The<br/>brief.</div><p>Written by the partner or shaped with us: gameplay, concept, references, constraints and objective.</p><span class="chip gray">DIRECTION</span></div><div class="flowBlock mid"><div class="eyebrow" style="color:#c3f6a4"><span class="emo">✨</span>Our contribution</div><div class="bigNo" style="color:var(--lime)">Playable<br/>thinking.</div><p>Hook, first interaction, pacing, visual clarity, progression, CTA and production feasibility.</p><span class="chip">VALUE ADDED</span></div><div class="flowBlock"><div class="eyebrow"><span class="emo">🎯</span>Partner outcome</div><div class="bigNo">A better<br/>test.</div><p>A focused, feedback-ready creative — not a random playable with no clear hypothesis.</p><span class="chip gray">EXECUTION</span></div></div>
+</section>
+
+<section class="slide-cut" hidden data-chapter="Process" data-short="Brief to kickoff">
+<div class="kicker">How we work <em>/ From brief to build</em></div><h2>Brief → estimate → <span class="accent">kickoff.</span></h2><p class="lead" style="max-width:1220px">Every project starts with a kickoff: the team breaks down the brief together and plans how to make it better.</p>
+<div class="procSteps">
+ <div class="procStep"><span class="procNum">01</span><h3><span class="emo">📋</span>Brief</h3><p>Written by the partner or shaped by us: game, audience, goals and references.</p></div><i class="procArrow">→</i>
+ <div class="procStep"><span class="procNum">02</span><h3><span class="emo">⏱️</span>Estimate</h3><p>We scope the work and commit to a realistic timeline before production begins.</p></div><i class="procArrow">→</i>
+ <div class="procStep key"><span class="procNum">03</span><h3><span class="emo">🤝</span>Kickoff meetup</h3><p>Project start: team and leads break down the brief, plan the build and spot improvements.</p></div><i class="procArrow">→</i>
+ <div class="procStep"><span class="procNum">04</span><h3><span class="emo">🚀</span>Build</h3><p>Production with daily feedback, QA and a platform-ready export.</p></div>
+</div>
+<div class="kickoff">
+ <div class="kWho"><div class="eyebrow">Who's in the kickoff</div>
+  <div class="kGroups">
+   <div class="kGroup"><span class="kLabel">Production team</span><div class="kPeople"><div class="kP"><span class="kAv">🎨</span>Artist</div><div class="kP"><span class="kAv">💻</span>Developer</div></div></div>
+   <span class="kPlus">+</span>
+   <div class="kGroup"><span class="kLabel">Leads</span><div class="kPeople"><div class="kP"><span class="kAv">🖌️</span>Lead Art</div><div class="kP"><span class="kAv">🧠</span>Lead Dev</div><div class="kP"><span class="kAv">📅</span>PM</div></div></div>
+  </div>
+ </div>
+ <div class="kAgenda"><div class="eyebrow">On the agenda</div>
+  <div class="kItem"><span class="kTick">1</span><div><b>Understand the brief</b><span>Goals, audience, constraints and references.</span></div></div>
+  <div class="kItem"><span class="kTick">2</span><div><b>Plan the build</b><span>Mechanics, assets, technical approach and risks.</span></div></div>
+  <div class="kItem"><span class="kTick">3</span><div><b>Find the upgrade</b><span>What we can make clearer, juicier and stronger.</span></div></div>
+ </div>
+</div>
+</section>
+
+<section class="slide" data-chapter="Process" data-short="Every playable levels up">
+<div class="kicker">How we work <em>/ Our standard</em></div><h2>No reruns. <span class="accent">Every playable levels up.</span></h2><p class="lead">Even when it's a repeat of an existing playable, the new version is made a level above — so players experience it as something fresh.</p>
+<div class="lvLayout">
+ <div class="lvCompare">
+  <div class="lvCard old"><span class="eyebrow">Previous version</span><div class="mock"><i class="m-hud"><i></i></i><i class="m-obj"></i><i class="m-hero"></i><i class="m-cta"></i></div><span class="lvTag">LVL 1</span></div>
+  <div class="lvArrow"><span>⬆</span><b>LEVEL<br/>UP</b></div>
+  <div class="lvCard new"><span class="eyebrow">New version</span><div class="mock"><i class="m-hud"><i></i></i><i class="m-obj"></i><i class="m-hero"></i><i class="m-cta"></i><i class="spark s1">✦</i><i class="spark s2">✦</i><i class="spark s3">✦</i></div><span class="lvTag">LVL 2</span></div>
+ </div>
+ <div class="lvLevers">
+  <div class="lever"><h3><span class="emo">🪝</span>Fresher hook</h3><p>A new angle on the opening moment.</p></div>
+  <div class="lever"><h3><span class="emo">🎨</span>Upgraded visuals</h3><p>Art, lighting and VFX that feel current.</p></div>
+  <div class="lever"><h3><span class="emo">✨</span>Juicier game feel</h3><p>Stronger, more satisfying feedback on every input.</p></div>
+  <div class="lever"><h3><span class="emo">⏱️</span>Tighter pacing</h3><p>Faster to the fun, less dead time.</p></div>
+  <div class="lever"><h3><span class="emo">🎯</span>Clearer CTA</h3><p>A more natural route from gameplay to install.</p></div>
+  <div class="lever"><h3><span class="emo">🧪</span>New hypothesis</h3><p>Every version tests and teaches something new.</p></div>
+ </div>
+</div>
+<div class="noteStrip"><span><strong style="color:var(--lime)">Same brief ≠ same playable.</strong> Each version builds on what we learned from the last one.</span><span>REPEAT → REFINE → RAISE THE BAR</span></div>
+</section>
+
+<section class="slide-cut" hidden data-chapter="Ideation" data-short="Signals and references">
+<div class="kicker">Ideation best practices <em>/ Research signals</em></div><h2>Evidence in. <span class="accent">Better decisions out.</span></h2><p class="lead">We track patterns and translate them into actionable creative hypotheses, instead of copying what is already on the market.</p>
+<div class="grid four" style="margin-top:43px"><div class="panel" style="height:322px"><div class="cardIcon">📈</div><h3>Trend tracking</h3><p>Spot emerging mechanics, visual patterns and ad-native interaction styles.</p><div class="rule"><strong>↳</strong> What is earning attention?</div></div><div class="panel" style="height:322px"><div class="cardIcon">🔍</div><h3>Competitor teardown</h3><p>Study hooks, clarity, pacing, fail states and install moments.</p><div class="rule"><strong>↳</strong> Why does it work?</div></div><div class="panel" style="height:322px"><div class="cardIcon">📚</div><h3>Reference Hub</h3><span class="chip inhouse">IN-HOUSE</span><p>Our own platform: a curated, searchable library of standout mechanics, UI and gameplay moments, shared across the whole team.</p><div class="rule"><strong>↳</strong> What can we adapt?</div></div><div class="panel" style="height:322px"><div class="cardIcon">🧪</div><h3>Creative hypothesis</h3><p>Define a concrete change worth trying before adding complexity.</p><div class="rule"><strong>↳</strong> What will we learn?</div></div></div>
+<div class="noteStrip"><span><strong style="color:var(--lime)">No random playables.</strong> Every change should serve a player moment or a testable objective.</span><span>RESEARCH → HYPOTHESIS → TEST</span></div>
+</section>
+
+<section class="slide-cut" hidden data-chapter="Ideation" data-short="Five concept checks">
+<div class="kicker">Ideation best practices <em>/ Creative filter</em></div><h2>Five checks before we build.</h2><p class="lead">An efficient brief-to-creative filter: remove ambiguity early, spend iteration time where it changes the experience.</p>
+<div style="margin-top:31px"><div class="filter"><span class="badgeNumber">01</span><b><span class="emo">🤝</span>Player promise</b><span>Can the player understand the goal without an explanation?</span></div><div class="filter"><span class="badgeNumber">02</span><b><span class="emo">🪝</span>Hook</b><span>Does the opening create curiosity, urgency or immediate agency?</span></div><div class="filter"><span class="badgeNumber">03</span><b><span class="emo">👆</span>Core action</b><span>Is the first meaningful input obvious and rewarding?</span></div><div class="filter"><span class="badgeNumber">04</span><b><span class="emo">📶</span>Progression</b><span>Is there a clear sense of change, challenge and payoff?</span></div><div class="filter"><span class="badgeNumber">05</span><b><span class="emo">💰</span>Conversion moment</b><span>Does the CTA follow a reason to want the full game?</span></div></div>
+</section>
+
+<section class="slide" data-chapter="Ideation" data-short="Playable narrative">
+<div class="kicker">Ideation best practices <em>/ Experience design</em></div><h2>A playable is a <span class="accent">short story.</span></h2><p class="lead">We design four connected moments, not four disconnected effects.</p>
+<div class="storyboard"><div class="beat"><div class="beatnum">01</div><div class="bar"></div><h3><span class="emo">🪝</span>Hook</h3><p>Immediately reveal the conflict, prize or irresistible action.</p></div><div class="beat"><div class="beatnum">02</div><div class="bar"></div><h3><span class="emo">👆</span>Interaction</h3><p>Make the first gesture intuitive. Show instant and legible feedback.</p></div><div class="beat"><div class="beatnum">03</div><div class="bar"></div><h3><span class="emo">📈</span>Progression</h3><p>Increase the stakes or add a meaningful twist — avoid repetitive taps.</p></div><div class="beat"><div class="beatnum">04</div><div class="bar"></div><h3><span class="emo">🏆</span>Payoff + CTA</h3><p>Reward completion or build desire for the next level and full game.</p></div></div>
+<div class="tiny" style="margin-top:13px">Narrative beats, not fixed time windows — pacing depends on the game and channel.</div>
+</section>
+
+<section class="slide-cut" hidden data-chapter="Ideation" data-short="Hook patterns">
+<div class="kicker">Ideation best practices <em>/ Hook library</em></div><h2>Pick a hook that <span class="accent">fits the mechanic.</span></h2>
+<div class="hookGrid">
+ <div class="hook"><div class="visual"><span class="tag">EXAMPLE DIRECTION</span><svg viewBox="0 0 240 230"><rect x="29" y="33" width="184" height="166" rx="10" fill="#36493d"/><path d="M50 78h140M50 150h140" stroke="#98b19e" stroke-width="3" stroke-dasharray="7 9"/><rect x="83" y="55" width="40" height="53" rx="5" fill="#ffb56f"/><rect x="83" y="125" width="40" height="53" rx="5" fill="#adf05b"/><circle cx="163" cy="109" r="20" fill="#fe6e6e"/><path d="M154 100l18 18M172 100l-18 18" stroke="#fff" stroke-width="6"/></svg></div><h3><span class="emo">⚠️</span>High-stakes choice</h3><p>One wrong move changes the outcome.</p></div>
+ <div class="hook"><div class="visual"><span class="tag">EXAMPLE DIRECTION</span><svg viewBox="0 0 240 230"><rect x="30" y="32" width="180" height="163" fill="#314e55"/><path d="M45 180V80H195V180" stroke="#b3c7c1" stroke-width="7" fill="none"/><circle cx="88" cy="136" r="19" fill="#ffb48e"/><rect x="77" y="157" width="22" height="28" rx="5" fill="#e6e9ba"/><circle cx="160" cy="132" r="20" fill="#ff766d"/><path d="M136 116l46 52" stroke="#ffe26b" stroke-width="5" stroke-dasharray="9 7"/><path d="M122 52l20 22-20 22" stroke="#caff6a" stroke-width="6" fill="none"/></svg></div><h3><span class="emo">🆘</span>Rescue / urgency</h3><p>A vulnerable target creates immediate purpose.</p></div>
+ <div class="hook"><div class="visual"><span class="tag">EXAMPLE DIRECTION</span><svg viewBox="0 0 240 230"><path d="M50 58h142v126H50z" fill="#385251"/><rect x="56" y="64" width="130" height="24" rx="8" fill="#b8e6a1"/><path d="M72 88V169M121 88V169M170 88V169" stroke="#122c28" stroke-width="5"/><circle cx="78" cy="110" r="14" fill="#ff927f"/><circle cx="129" cy="138" r="14" fill="#a8a0ff"/><circle cx="179" cy="162" r="14" fill="#caff6a"/><path d="M28 125l26 0M198 125h23" stroke="#a6f2e5" stroke-width="5" stroke-dasharray="5 5"/></svg></div><h3><span class="emo">✨</span>Satisfying change</h3><p>Show a transformation the player wants to finish.</p></div>
+ <div class="hook"><div class="visual"><span class="tag">EXAMPLE DIRECTION</span><svg viewBox="0 0 240 230"><rect x="33" y="50" width="175" height="130" rx="14" fill="#233e42"/><path d="M120 50V180" stroke="#b4d8ba" stroke-dasharray="9 8" stroke-width="3"/><path d="M62 121l22-26 22 26-22 26z" fill="#9cdaff"/><path d="M136 121l22-26 22 26-22 26z" fill="#ff947e"/><path d="M88 62l19 14-19 14M151 62l-19 14 19 14" stroke="#caff6a" fill="none" stroke-width="5"/><text x="120" y="208" text-anchor="middle" font-size="22" font-weight="900" fill="#e4eeca">VS</text></svg></div><h3><span class="emo">⚔️</span>Rivalry</h3><p>Let the player feel who wins, who loses and why.</p></div>
+</div>
+<div class="tiny" style="margin-top:16px">Illustrative mechanic directions, not claims about shipped titles.</div>
+</section>
+
+<section class="slide" data-chapter="Ideation" data-short="Competitor comparison">
+<div class="kicker">Ideation best practices <em>/ Visual proof</em></div><h2>Show the difference. <span class="accent">Don't just describe it.</span></h2>
+<div class="videoGrid"><div class="mediaCard pairCard"><div class="mediaSlot" data-media="competitor_tank" data-default="media/competitor_tank.mp4?v=4"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag them">COMPETITOR</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div class="mediaSlot" data-media="our_tank" data-default="media/our_tank.mp4?v=2"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">24PLAY</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div><div class="chip">PAIR 01</div><h3><span class="emo">🎯</span>Pure Sniper</h3><div class="checkList"><div class="checkRow"><i>✓</i> Choice before the shot</div><div class="checkRow"><i>✓</i> Readable target and hit</div><div class="checkRow"><i>✓</i> Richer world and effects</div></div></div></div><div class="mediaCard pairCard"><div class="mediaSlot" data-media="competitor_hostage" data-default="media/competitor_hostage.mp4"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag them">COMPETITOR</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div class="mediaSlot" data-media="our_convoy" data-default="media/our_convoy.mp4"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">24PLAY</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div><div class="chip">PAIR 02</div><h3><span class="emo">🔫</span>War Sniper</h3><div class="checkList"><div class="checkRow"><i>✓</i> Clear story stake</div><div class="checkRow"><i>✓</i> Clear goal and counter</div><div class="checkRow"><i>✓</i> Juicy hits and success</div></div></div></div></div>
+<div class="tiny" style="margin-top:16px">Left in each pair: competitor creative. Right: our 24Play version of the same idea.</div>
+</section>
+
+<section class="slide" data-chapter="Ideation" data-short="More comparisons">
+<div class="kicker">Ideation best practices <em>/ Same genre</em></div><h2>Same idea. <span class="accent">Different league.</span></h2>
+<div class="trioGrid"><div class="trioCard"><div class="trioHead"><div class="chip">PAIR 03</div><h3><span class="emo">🎱</span>8 Ball Pool</h3></div><div class="trioVids"><div class="mediaSlot" data-media="competitor_pool" data-default="media/competitor_pool.mp4?v=2"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag them">COMPETITOR</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div class="mediaSlot" data-media="our_pool" data-default="media/our_pool.mp4?v=2"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">24PLAY</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div></div><p class="trioNote">Ours: a goal, a twist and real progression.</p></div><div class="trioCard"><div class="trioHead"><div class="chip">PAIR 04</div><h3><span class="emo">⛳</span>Carrom Pool</h3></div><div class="trioVids"><div class="mediaSlot" data-media="competitor_golf" data-default="media/competitor_golf.mp4?v=2"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag them">COMPETITOR</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div class="mediaSlot" data-media="our_golf" data-default="media/our_golf.mp4?v=2"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">24PLAY</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div></div><p class="trioNote">Ours: a world, a reward loop and a big finish.</p></div><div class="trioCard"><div class="trioHead"><div class="chip">PAIR 05</div><h3><span class="emo">🎯</span>Darts of Fury</h3></div><div class="trioVids"><div class="mediaSlot" data-media="competitor_darts" data-default="media/competitor_darts.mp4"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag them">COMPETITOR</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div class="mediaSlot" data-media="our_darts" data-default="media/our_darts.mp4"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">24PLAY</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div></div><p class="trioNote">Ours: sharper aim, juicier hits and a satisfying finish.</p></div></div>
+<div class="tiny" style="margin-top:14px">Some competitor creatives are plain video ads, not playables. Every 24Play version is fully interactive.</div>
+</section>
+
+<section class="slide" data-chapter="Ideation" data-short="Clarity">
+<div class="kicker">Ideation best practices <em>/ Clarity</em></div><h2>Understood in <span class="accent">one glance.</span></h2><p class="lead" style="max-width:1220px">A playable has seconds to communicate. Every frame must answer: what is it, what do I do, why should I care?</p>
+<div class="clarityLayout">
+ <div class="clarityPhone"><svg viewBox="0 0 220 400" aria-hidden="true"><defs><linearGradient id="cBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1e3b3b"/><stop offset="1" stop-color="#0f1e21"/></linearGradient></defs><rect width="220" height="400" fill="url(#cBg)"/><rect x="20" y="22" width="180" height="10" rx="5" fill="#ffffff22"/><rect class="fill" x="20" y="22" width="180" height="10" rx="5" fill="#caff6a"/><text x="20" y="52" font-size="10" font-weight="800" letter-spacing="1.5" fill="#bcd0c5">LEVEL 3</text><circle cx="160" cy="118" r="30" fill="#caff6a1c"/><polygon class="goal" points="160,100 164.7,111.5 177.1,112.4 167.6,120.5 170.6,132.6 160,126 149.4,132.6 152.4,120.5 142.9,112.4 155.3,111.5" fill="#caff6a"/><rect class="enemy" x="92" y="196" width="36" height="22" rx="6" fill="#ff766d"/><path class="aim" d="M84 298Q104 220 150 142" stroke="#caff6a" stroke-width="3" fill="none" stroke-dasharray="6 8" stroke-linecap="round" opacity=".75"/><circle class="focus" cx="80" cy="318" r="18" fill="none" stroke="#caff6a" stroke-width="2"/><circle cx="80" cy="318" r="18" fill="#f5f7f1"/><circle cx="74" cy="313" r="5" fill="#0f1e21"/><circle cx="86" cy="313" r="5" fill="#0f1e21"/><circle class="finger" cx="94" cy="344" r="11" fill="#ffffff" fill-opacity=".92"/><text x="120" y="380" text-anchor="middle" font-size="13" font-weight="800" letter-spacing="1.5" fill="#ffffff">DRAG TO AIM</text></svg>
+  <span class="cMark m1" style="left:114px;top:294px">1</span><span class="cMark m2" style="left:34px;top:376px">2</span><span class="cMark m3" style="left:190px;top:96px">3</span><span class="cMark m4" style="left:208px;top:27px">4</span></div>
+ <div class="clarityList">
+  <div class="cRow" data-m="1"><span class="cNum">1</span><div><h3><span class="emo">🎯</span>One focal point</h3><p>Contrast, scale and motion lead the eye to the player and the action first.</p></div></div>
+  <div class="cRow" data-m="2"><span class="cNum">2</span><div><h3><span class="emo">👉</span>Show, don't tell</h3><p>A hand hint demonstrates the gesture. On-screen copy stays at 2–4 words.</p></div></div>
+  <div class="cRow" data-m="3"><span class="cNum">3</span><div><h3><span class="emo">🏁</span>Visible goal &amp; stakes</h3><p>Target, threat or progress is on screen from the very first frame.</p></div></div>
+  <div class="cRow" data-m="4"><span class="cNum">4</span><div><h3><span class="emo">🧼</span>Clean, safe UI</h3><p>Minimal HUD, respected safe areas — nothing covers the action or the CTA.</p></div></div>
+ </div>
+</div>
+</section>
+
+<section class="slide-cut" hidden data-chapter="Ideation" data-short="Game feel">
+<div class="kicker">Ideation best practices <em>/ Game feel</em></div><h2>Game feel makes taps <span class="accent">worth repeating.</span></h2><p class="lead">Clarity tells players what to do. Game feel makes doing it satisfying: every input gets an immediate, readable and physical response.</p>
+<div class="feelGrid">
+ <div class="feel"><div class="feelDemo d-tap"><i class="btn c"></i><i class="ring c"></i><i class="finger c"></i></div><div><h3><span class="emo">⚡</span>Instant response</h3><p>Every input reacts within a frame or two. No dead taps.</p></div></div>
+ <div class="feel"><div class="feelDemo d-squash"><i class="floor"></i><i class="ball"></i></div><div><h3><span class="emo">🏀</span>Squash &amp; stretch</h3><p>Anticipation and impact give objects weight and life.</p></div></div>
+ <div class="feel"><div class="feelDemo d-burst"><i class="core c"></i><i class="p" style="--a:0deg"></i><i class="p" style="--a:45deg"></i><i class="p" style="--a:90deg"></i><i class="p" style="--a:135deg"></i><i class="p" style="--a:180deg"></i><i class="p" style="--a:225deg"></i><i class="p" style="--a:270deg"></i><i class="p" style="--a:315deg"></i></div><div><h3><span class="emo">🎆</span>Particles &amp; flashes</h3><p>Layered VFX confirm hits, pickups and success.</p></div></div>
+ <div class="feel"><div class="feelDemo d-ease"><span>linear</span><span>eased</span><i class="t t1"></i><i class="t t2"></i><i class="a"></i><i class="b"></i></div><div><h3><span class="emo">🌊</span>Easing &amp; overshoot</h3><p>Ease-out with a little overshoot. Nothing moves like a robot.</p></div></div>
+ <div class="feel"><div class="feelDemo d-count"><b></b><i class="coin"></i><i class="coin"></i><i class="coin"></i><em>+30</em></div><div><h3><span class="emo">🪙</span>Escalating reward</h3><p>Counters roll up, combos grow, coins fly into the HUD.</p></div></div>
+ <div class="feel"><div class="feelDemo d-shake"><i class="shot"></i><i class="box"></i></div><div><h3><span class="emo">💥</span>Hit-stop &amp; shake</h3><p>A tiny freeze and shake sell big moments. Use sparingly.</p></div></div>
+</div>
+<div class="noteStrip"><span><strong style="color:var(--lime)">Restraint rule:</strong> juice amplifies the core action — it never covers the target, the instruction or the CTA.</span><span>CLARITY GETS THE FIRST TAP · FEEL EARNS THE NEXT</span></div>
+</section>
+
+<section class="slide-cut" hidden data-chapter="Ideation" data-short="Progression">
+<div class="kicker">Ideation best practices <em>/ Engagement</em></div><h2>Progression makes <span class="accent">every action matter.</span></h2><p class="lead">The player should notice that something changed after each input. We use visual feedback, rising stakes and a payoff to avoid flat gameplay loops.</p>
+<div class="ladder"><div class="aside"><span class="eyebrow">One interaction</span><h3 style="margin-top:20px">Teach through doing.</h3><p>Tap, swipe, drag or aim — whatever the core mechanic is, the player learns by producing a clear outcome.</p><div style="font-size:65px;margin-top:34px;color:var(--teal)">↘</div></div><div class="center"><div class="level"><span class="dots">1</span><span><span class="emo">⚡</span>Instant feedback <small>Movement, reaction, hit, collection or state change</small></span></div><div class="verticalArrow">↓</div><div class="level"><span class="dots">2</span><span><span class="emo">🔥</span>Meaningful escalation <small>More tension, an obstacle, a combo or a new decision</small></span></div><div class="verticalArrow">↓</div><div class="level"><span class="dots">3</span><span><span class="emo">🎉</span>Visible payoff <small>Completion, transformation, reward or cliffhanger</small></span></div></div><div class="aside"><span class="eyebrow">One player journey</span><h3 style="margin-top:20px">From curiosity to intent.</h3><p>Progression bridges the original hook and the final install request.</p><div class="callout" style="margin-top:33px;font-size:16px">Design for a satisfying moment, not just a longer session.</div></div></div>
+</section>
+
+<section class="slide-cut" hidden data-chapter="Ideation" data-short="CTA design">
+<div class="kicker">Ideation best practices <em>/ Conversion</em></div><h2>CTA is the <span class="accent">payoff,</span><br/>not a sticker.</h2>
+<div class="ctaLayout"><div style="padding-top:29px"><div class="panel" style="margin-bottom:17px"><div class="eyebrow">Before CTA</div><h3 style="margin-top:13px"><span class="emo">🎁</span>Give a reason to continue.</h3><p>Reward a win, build anticipation, show the next challenge — then make the action obvious.</p></div><div class="panel" style="margin-bottom:17px"><div class="eyebrow">During CTA</div><h3 style="margin-top:13px"><span class="emo">🙌</span>Keep it prominent and honest.</h3><p>Readable copy, strong contrast, no misleading interactions or unauthorized first-tap redirection.</p></div><div class="callout">Best practice: make the install action feel like a natural next step from the gameplay experience.</div></div><div class="ctaPhone"><div class="ctaGame"><div class="chip" style="background:#223e31">LEVEL COMPLETE</div><div class="circle" style="display:grid;place-items:center;font-size:64px;color:#1f3320">✓</div><span style="font-weight:800">READY FOR MORE?</span></div><div class="ctaButton">PLAY THE FULL GAME ↗</div></div></div>
+</section>
+
+<section class="slide-cut" hidden data-chapter="Ideation" data-short="Daily feedback">
+<div class="kicker">Ideation best practices <em>/ Continuous iteration</em></div><h2>Feedback throughout.<br/><span class="accent">Decisions captured.</span></h2><p class="lead">We review creative quality as the playable takes shape. A lightweight decision log makes spontaneous improvements repeatable and easier to discuss with partners.</p>
+<div class="feedback"><div class="feedTimeline"><div class="feedNode"><div class="feedDot">1</div><div><h3><span class="emo">🧭</span>Early concept alignment</h3><p>What is the hook, mechanic and intended player reaction?</p></div></div><div class="feedNode"><div class="feedDot">2</div><div><h3><span class="emo">🗓️</span>Daily work-in-progress feedback</h3><p>Gameplay clarity, UI, art direction, VFX, pacing and audio.</p></div></div><div class="feedNode"><div class="feedDot">3</div><div><h3><span class="emo">🎮</span>Playable review</h3><p>First-time-user friction, progression, CTA and overall feel.</p></div></div><div class="feedNode"><div class="feedDot">4</div><div><h3><span class="emo">📦</span>Export review</h3><p>Device behavior, build weight and platform requirements.</p></div></div></div><div class="log"><h3><span class="emo">📝</span>Creative decision log</h3><div class="paperRow"><strong>Brief / original</strong>Player sorts vehicles into matching lanes.</div><div class="paperRow"><strong>Improvement</strong>Add a clear near-miss and a celebratory payoff.</div><div class="paperRow"><strong>Reason</strong>Clarifies stakes and makes progression visible.</div><div class="paperRow"><strong>Review result</strong>Validate in the next playable test.</div><div class="suggested">PROPOSED PROCESS IMPROVEMENT</div></div></div>
+</section>
+
+<section class="slide-cut" hidden data-chapter="Production" data-short="Speed and quality">
+<div class="kicker">Production approach <em>/ Quality × Speed</em></div><h2>Move fast on the repeatable.<br/><span class="accent">Protect what players feel.</span></h2><p class="lead">We use standardization to save production time — not to standardize away the important parts of the experience.</p>
+<div class="matrix"><div><span class="chip">SPEED LEVERS</span><h3 style="margin-top:19px"><span class="emo">♻️</span>Reuse what works.</h3><ul><li><span class="symbol">+</span> Shared assets and materials</li><li><span class="symbol">+</span> Reusable VFX and UI patterns</li><li><span class="symbol">+</span> Platform presets and templates</li><li><span class="symbol">+</span> Consistent review checkpoints</li></ul></div><div><span class="chip orange">QUALITY FLOOR</span><h3 style="margin-top:19px"><span class="emo">🛡️</span>Don't compromise on.</h3><ul><li><span class="symbol">✓</span> First-frame comprehension</li><li><span class="symbol">✓</span> Readable interaction and feedback</li><li><span class="symbol">✓</span> Smooth mobile experience</li><li><span class="symbol">✓</span> Accurate CTA and reliable export</li></ul></div></div>
+</section>
+
+<section class="slide" data-chapter="Ideation" data-short="Best practices">
+<div class="kicker">Ideation best practices <em>/ Length · Replay · Variety</em></div><h2>Built for long sessions. <span class="accent">Hard to put down.</span></h2>
+<div class="bpGrid"><div class="bpCard hasVideo"><div class="bpInner"><div class="mediaSlot" data-media="bp_length" data-default="media/bp_length.mp4"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">⏱️ 30–40 SEC</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div class="bpContent"><div class="bpHead"><div class="bpIcon"><span class="emo">⏱️</span></div><div><h3>Playable length</h3><p class="bpSub">The longer they play, the better.</p></div></div><div class="checkList"><div class="checkRow"><i>✓</i> <span>Average: <b>30–40 sec</b></span></div><div class="checkRow"><i>✓</i> <span>Some run <b>1–1.5 min</b></span></div><div class="checkRow"><i>✓</i> First input in seconds</div><div class="checkRow"><i>✓</i> CTA at the peak of fun</div></div><div class="bpRule">Example: a full 30–40 second playable.</div></div></div></div><div class="bpCard hasVideo"><div class="bpInner"><div class="mediaSlot" data-media="bp_replay" data-default="media/bp_replay.mp4"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">🔁 RETRY</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div class="bpContent"><div class="bpHead"><div class="bpIcon"><span class="emo">🔁</span></div><div><h3>Replayability</h3><p class="bpSub">Make "one more try" feel natural.</p></div></div><div class="checkList"><div class="checkRow"><i>✓</i> Instant retry after win or fail</div><div class="checkRow"><i>✓</i> Near-miss losses that feel winnable</div><div class="checkRow"><i>✓</i> Score, stars or rank to beat</div><div class="checkRow"><i>✓</i> Each retry slightly different</div></div><div class="bpRule">Rule of thumb: a retry tap is a strong signal.</div></div></div></div><div class="bpCard hasVideo"><div class="bpInner"><div class="mediaSlot" data-media="bp_best_visual" data-default="media/best_visual.mp4?v=4"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div class="bpContent"><div class="bpHead"><div class="bpIcon"><span class="emo">🎲</span></div><div><h3>Gameplay variety</h3><p class="bpSub">Escalate, don't repeat.</p></div></div><div class="checkList"><div class="checkRow"><i>✓</i> Two or three beats that build up</div><div class="checkRow"><i>✓</i> A twist mid-way: new enemy, item or rule</div><div class="checkRow"><i>✓</i> Meaningful choices: path, weapon, target</div><div class="checkRow"><i>✓</i> Randomised layouts, rewards and spawns</div></div><div class="bpRule">Rule of thumb: no beat should look like the last one.</div></div></div></div></div>
+</section>
+
+<section class="slide" data-chapter="Export" data-short="Export best practices">
+<div class="kicker">Export best practices <em>/ Variants · Balance · Redirects</em></div><h2>One playable. <span class="accent">Many exports.</span></h2><p class="lead expLead">The best results come from iterating on a large number of creatives. The more varied versions we build, the better the campaign performs.</p>
+<div class="expCards"><div class="expCard c4"><span class="expIco"><span class="emo">📦</span></span><div><b>Volume</b><small>More exports, faster winner</small></div></div><div class="expCard c3"><span class="expIco"><span class="emo">👆</span></span><div><b>Taps and timers</b><small>Redirect after N taps or N seconds</small></div></div><div class="expCard c1"><span class="expIco"><span class="emo">🎮</span></span><div><b>Gameplay variants</b><small>Different goals and win conditions</small></div></div><div class="expCard c2"><span class="expIco"><span class="emo">⚖️</span></span><div><b>Balance variants</b><small>Difficulty or a fixed outcome</small></div></div></div>
+<h3 class="expCaption">Most often used settings</h3><table class="expTable"><thead><tr><th>Game</th><th class="hNum">Creatives</th><th class="hTap">Tap to redirect, clicks</th><th class="hTime">Time to redirect</th><th class="hAlt">Alt. redirects</th><th class="hTut">Tutorial / Intro</th><th class="hCond">Forced conditions</th><th class="hDiff">Difficulty</th></tr></thead><tbody><tr><td class="g"><span class="gEmo">🚁</span>War Drone</td><td class="num"><span class="nBar" style="--w:57.4"></span><b>224</b></td><td><span class="xp xTap" style="--k:0">1</span><span class="xp xTap" style="--k:1">3</span><span class="xp xTap" style="--k:2">4</span><span class="xp xTap" style="--k:3">10</span></td><td><span class="xp xTime" style="--k:0">10s</span></td><td><span class="xna">—</span></td><td><span class="xp xOn" style="--k:0">ON</span><span class="xp xOff" style="--k:1">OFF</span></td><td><span class="xna">—</span></td><td><span class="xp xEasy" style="--k:0">Easy</span><span class="xp xMed" style="--k:1">Med</span><span class="xp xHard" style="--k:2">Hard</span></td></tr><tr><td class="g"><span class="gEmo">🎱</span>8 Ball Pool</td><td class="num"><span class="nBar" style="--w:100.0"></span><b>390</b></td><td><span class="xna">—</span></td><td><span class="xna">—</span></td><td><span class="xna">—</span></td><td><span class="xp xOn" style="--k:0">ON</span></td><td><span class="xna">—</span></td><td><span class="xna">—</span></td></tr><tr><td class="g"><span class="gEmo">🎯</span>Pure Sniper</td><td class="num"><span class="nBar" style="--w:49.5"></span><b>193</b></td><td><span class="xp xTap" style="--k:0">1</span><span class="xp xTap" style="--k:1">2</span><span class="xp xTap" style="--k:2">3</span><span class="xp xTap" style="--k:3">4</span></td><td><span class="xna">—</span></td><td><span class="xna">—</span></td><td><span class="xp xOn" style="--k:0">ON</span><span class="xp xOff" style="--k:1">OFF</span></td><td><span class="xna">—</span></td><td><span class="xp xEasy" style="--k:0">Easy</span><span class="xp xMed" style="--k:1">Med</span><span class="xp xHard" style="--k:2">Hard</span></td></tr><tr><td class="g"><span class="gEmo">🔫</span>War Sniper</td><td class="num"><span class="nBar" style="--w:75.4"></span><b>294</b></td><td><span class="xna">—</span></td><td><span class="xna">—</span></td><td><span class="xna">—</span></td><td><span class="xp xOn" style="--k:0">ON</span><span class="xp xOff" style="--k:1">OFF</span></td><td><span class="xna">—</span></td><td><span class="xp xEasy" style="--k:0">Easy</span><span class="xp xMed" style="--k:1">Med</span><span class="xp xHard" style="--k:2">Hard</span></td></tr><tr><td class="g"><span class="gEmo">⚾</span>Baseball Clash</td><td class="num"><span class="nBar" style="--w:15.6"></span><b>61</b></td><td><span class="xp xTap" style="--k:0">1</span><span class="xp xTap" style="--k:1">2</span><span class="xp xTap" style="--k:2">3</span><span class="xp xTap" style="--k:3">4</span></td><td><span class="xp xTime" style="--k:0">10s</span><span class="xp xTime" style="--k:1">15s</span></td><td><span class="xna">—</span></td><td><span class="xp xOn" style="--k:0">ON</span><span class="xp xOff" style="--k:1">OFF</span></td><td><span class="xna">—</span></td><td><span class="xp xEasy" style="--k:0">Easy</span><span class="xp xMed" style="--k:1">Med</span><span class="xp xHard" style="--k:2">Hard</span></td></tr><tr><td class="g"><span class="gEmo">🏏</span>Cricket League</td><td class="num"><span class="nBar" style="--w:9.7"></span><b>38</b></td><td><span class="xp xTap" style="--k:0">1</span><span class="xp xTap" style="--k:1">2</span><span class="xp xTap" style="--k:2">3</span><span class="xp xTap" style="--k:3">4</span></td><td><span class="xp xTime" style="--k:0">10s</span><span class="xp xTime" style="--k:1">15s</span></td><td><span class="xna">—</span></td><td><span class="xp xOn" style="--k:0">ON</span></td><td><span class="xna">—</span></td><td><span class="xna">—</span></td></tr><tr><td class="g"><span class="gEmo">⚽</span>Head Ball 2</td><td class="num"><span class="nBar" style="--w:75.9"></span><b>296</b></td><td><span class="xp xTap" style="--k:0">1</span><span class="xp xTap" style="--k:1">2</span><span class="xp xTap" style="--k:2">3</span><span class="xp xTap" style="--k:3">4</span><span class="xp xTap" style="--k:4">5</span></td><td><span class="xp xTime" style="--k:0">20s</span><span class="xp xTime" style="--k:1">60s</span></td><td><span class="xp xAlt" style="--k:0">1–5 goals</span></td><td><span class="xp xOn" style="--k:0">ON</span></td><td><span class="xna">—</span></td><td><span class="xp xEasy" style="--k:0">Easy</span><span class="xp xMed" style="--k:1">Med</span><span class="xp xHard" style="--k:2">Hard</span></td></tr><tr><td class="g"><span class="gEmo">🪙</span>Carrom Pool</td><td class="num"><span class="nBar" style="--w:23.3"></span><b>91</b></td><td><span class="xp xTap" style="--k:0">1</span><span class="xp xTap" style="--k:1">2</span><span class="xp xTap" style="--k:2">3</span><span class="xp xTap" style="--k:3">4</span><span class="xp xTap" style="--k:4">5</span></td><td><span class="xp xTime" style="--k:0">5s</span><span class="xp xTime" style="--k:1">20s</span><span class="xp xTime" style="--k:2">30s</span><span class="xp xTime" style="--k:3">60s</span></td><td><span class="xna">—</span></td><td><span class="xp xOn" style="--k:0">ON</span><span class="xp xOff" style="--k:1">OFF</span></td><td><span class="xp xWin" style="--k:0">WIN</span><span class="xp xFail" style="--k:1">FAIL</span></td><td><span class="xp xEasy" style="--k:0">Easy</span><span class="xp xMed" style="--k:1">Med</span><span class="xp xHard" style="--k:2">Hard</span></td></tr><tr><td class="g"><span class="gEmo">🏀</span>Basketball Stars</td><td class="num"><span class="nBar" style="--w:10.8"></span><b>42</b></td><td><span class="xp xTap" style="--k:0">3</span><span class="xp xTap" style="--k:1">6</span></td><td><span class="xna">—</span></td><td><span class="xp xAlt" style="--k:0">1 score</span><span class="xp xAlt" style="--k:1">4 rounds</span></td><td><span class="xp xOn" style="--k:0">ON</span></td><td><span class="xna">—</span></td><td><span class="xp xEasy" style="--k:0">Easy</span><span class="xp xMed" style="--k:1">Med</span><span class="xp xHard" style="--k:2">Hard</span></td></tr><tr><td class="g"><span class="gEmo">⛳</span>Golf Battle</td><td class="num"><span class="nBar" style="--w:11.3"></span><b>44</b></td><td><span class="xp xTap" style="--k:0">1</span><span class="xp xTap" style="--k:1">2</span><span class="xp xTap" style="--k:2">3</span></td><td><span class="xna">—</span></td><td><span class="xp xAlt" style="--k:0">2 shots</span></td><td><span class="xp xOn" style="--k:0">ON</span><span class="xp xOff" style="--k:1">OFF</span></td><td><span class="xp xWin" style="--k:0">WIN</span><span class="xp xFail" style="--k:1">FAIL</span></td><td><span class="xp xEasy" style="--k:0">Easy</span><span class="xp xMed" style="--k:1">Med</span><span class="xp xHard" style="--k:2">Hard</span></td></tr></tbody></table>
+</section>
+
+<section class="slide-cut" hidden data-chapter="Production" data-short="Internal ecosystem">
+<div class="kicker">Production approach <em>/ Internal ecosystem</em></div><h2>Our tools turn <span class="accent">knowledge into speed.</span></h2><p class="lead">Creative references, reusable assets and efficient technical pipelines help us iterate without restarting from zero.</p>
+<div class="toolGrid"><div class="toolCard"><div class="iconBox">⚙</div><h3>Playable Platform</h3><p>Flexible settings for behavior, layout and destination-specific export.</p><span class="bottomWord">CONFIGURABLE OUTPUT</span></div><div class="toolCard"><div class="iconBox">◈</div><h3>Reference Hub</h3><p>Shared examples of strong UI, mechanics, hooks and creative patterns.</p><span class="bottomWord">BETTER STARTING POINTS</span></div><div class="toolCard"><div class="iconBox">▦</div><h3>Asset Hub</h3><p>Reusable 3D, UI and VFX components reduce repetitive setup.</p><span class="bottomWord">REUSABLE PRODUCTION</span></div><div class="toolCard"><div class="iconBox">✳</div><h3>VFX Editor</h3><p>Faster experimentation with feedback, effects and motion language.</p><span class="bottomWord">ITERATION SPEED</span></div><div class="toolCard"><div class="iconBox">⬡</div><h3>GLB Compressor</h3><p>Smaller 3D delivery payloads with attention to visible quality.</p><span class="bottomWord">LIGHTER BUILDS</span></div></div>
+</section>
+
+<section class="slide" data-chapter="Production" data-short="Platform usage">
+<div class="kicker">Production approach <em>/ Playable Platform</em></div><h2>14 updates in 6 months. <span class="accent">What's next?</span></h2>
+<div class="platLayout2"><div class="shipCard"><div class="shipHead"><div class="chip">LAST 6 MONTHS</div><h3><span class="emo">✅</span>Shipped on the platform</h3></div><div class="shipList"><div class="shipItem"><span class="emo">🎨</span><span>Refreshed platform UI and design</span></div><div class="shipItem"><span class="emo">🧪</span><span>Automated QA system</span></div><div class="shipItem"><span class="emo">🛠️</span><span>Optimisation and bug fixes</span></div><div class="shipItem"><span class="emo">🤖</span><span>AI assistant to guide you</span></div><div class="shipItem"><span class="emo">🧱</span><span>Major base template upgrade</span></div><div class="shipItem"><span class="emo">🌍</span><span>Adaptive localisation system</span></div><div class="shipItem"><span class="emo">📉</span><span>Smaller playables, richer content</span></div><div class="shipItem"><span class="emo">📘</span><span>Short "How it works" guides</span></div><div class="shipItem"><span class="emo">🆕</span><span>Short "What's new" updates</span></div><div class="shipItem"><span class="emo">📡</span><span>New network: Aarki</span></div><div class="shipItem"><span class="emo">📦</span><span>Extended export interface</span></div><div class="shipItem"><span class="emo">🗜️</span><span>Smaller exported playable size</span></div><div class="shipItem"><span class="emo">🗂️</span><span>Bulk export and management</span></div><div class="shipItem"><span class="emo">🔄</span><span>Auto-update to the latest version</span></div></div></div><div class="platSide"><div class="nextCard"><div class="chip gray">COMING NEXT</div><div class="shipList one"><div class="shipItem"><span class="emo">🤖</span><span>Smarter AI assistant</span></div><div class="shipItem"><span class="emo">🎛️</span><span>Deeper level and behaviour configs</span></div><div class="shipItem"><span class="emo">↪️</span><span>Redirect control and setup</span></div><div class="shipItem"><span class="emo">⏳</span><span>Custom loaders</span></div></div></div><div class="askCard"><div class="chip">YOUR INPUT</div><h3><span class="emo">💬</span>Send me your suggestions</h3><p>What slows you down? What would you like to control yourself? Every idea gets a reply. 🚀</p></div></div></div>
+</section>
+
+<section class="slide" data-chapter="Production" data-short="Platform tour">
+<div class="kicker">Production approach <em>/ Playable Platform</em></div><h2>See it in action. <span class="accent">Click to zoom.</span></h2>
+<div class="shotGrid"><button class="shot" data-src="media/platform/creatives.jpg"><img src="media/platform/creatives.jpg" alt="Refreshed UI and design" loading="lazy"/><span class="shotCap"><span class="emo">🎨</span>Refreshed UI and design</span></button><button class="shot" data-src="media/platform/library.jpg"><img src="media/platform/library.jpg" alt="Bulk management, auto QA, auto-update" loading="lazy"/><span class="shotCap"><span class="emo">🗂️</span>Bulk management, auto QA, auto-update</span></button><button class="shot" data-src="media/platform/export.jpg"><img src="media/platform/export.jpg" alt="Extended exports, new network Aarki" loading="lazy"/><span class="shotCap"><span class="emo">📡</span>Extended exports, new network Aarki</span></button><button class="shot" data-src="media/platform/assistant.jpg"><img src="media/platform/assistant.jpg" alt="AI assistant inside the platform" loading="lazy"/><span class="shotCap"><span class="emo">🤖</span>AI assistant inside the platform</span></button><button class="shot" data-src="media/platform/howitworks.jpg"><img src="media/platform/howitworks.jpg" alt=""How it works" guides" loading="lazy"/><span class="shotCap"><span class="emo">📘</span>"How it works" guides</span></button><button class="shot" data-src="media/platform/whatsnew.jpg"><img src="media/platform/whatsnew.jpg" alt=""What's new" release notes" loading="lazy"/><span class="shotCap"><span class="emo">🆕</span>"What's new" release notes</span></button></div>
+</section>
+
+<section class="slide-cut" hidden data-chapter="Export" data-short="Export philosophy">
+<div class="kicker">Export best practices <em>/ Technical approach</em></div><h2>Export is a <span class="accent">design constraint</span><br/>from day one.</h2><p class="lead">Beautiful gameplay only matters if the playable opens quickly, responds correctly and behaves consistently in the target ad environment.</p>
+<div class="pipe"><div class="pipeItem"><div class="id">01</div><h3><span class="emo">🎯</span>Target</h3><p>Confirm network, device, orientation and handoff format.</p></div><div class="pipeItem"><div class="id">02</div><h3><span class="emo">💾</span>Budget</h3><p>Set size and startup-time priorities before asset production.</p></div><div class="pipeItem"><div class="id">03</div><h3><span class="emo">⚡</span>Optimize</h3><p>Geometry, textures, GLB, audio, effects and render cost.</p></div><div class="pipeItem"><div class="id">04</div><h3><span class="emo">📦</span>Package</h3><p>Inline assets, minify and apply a platform-specific profile.</p></div><div class="pipeItem"><div class="id">05</div><h3><span class="emo">✅</span>Validate</h3><p>Test input, MRAID, responsiveness, audio and CTA.</p></div><div class="pipeItem"><div class="id">06</div><h3><span class="emo">🚀</span>Deliver</h3><p>Export a clean build with tested behavior and traceable version.</p></div></div>
+<div class="tiny" style="margin-top:22px">Build requirements vary by channel; profiles must be checked against the destination's current specification.</div>
+</section>
+
+<section class="slide-cut" hidden data-chapter="Export" data-short="Platform profiles">
+<div class="kicker">Export best practices <em>/ Platform awareness</em></div><h2>One production core.<br/><span class="accent">Destination-aware output.</span></h2><p class="lead" style="max-width:1000px">Platform presets help avoid last-minute rework. They do not replace final validation against each partner's up-to-date rules.</p>
+<table class="specTable"><thead><tr><th>Destination</th><th>Package</th><th>Size guidance</th><th>Key checks</th></tr></thead><tbody><tr><td>AppLovin</td><td>Single self-contained HTML</td><td>5 MB max</td><td>MRAID 2.0, no external requests, both orientations, sound / click behavior</td></tr><tr><td>Unity Ads</td><td>Single inlined HTML</td><td>Under 5 MB</td><td>MRAID 3.0, viewability, CTA via MRAID, portrait + landscape</td></tr><tr><td>Google Ads</td><td>HTML5 ZIP package</td><td>5 MB max ZIP</td><td>Responsive layout, orientation tags, package rules</td></tr></tbody></table>
+<div class="sourceFoot">Based on official destination specifications, checked October 2026: <a href="https://support.applovin.com/en/growth/promoting-your-apps/welcome-to-applovin/creative-specs-and-guidelines" target="_blank" rel="noreferrer">AppLovin</a> · <a href="https://docs.unity.com/en-us/grow/acquire/creatives/playable/specifications" target="_blank" rel="noreferrer">Unity</a> · <a href="https://support.google.com/google-ads/answer/9981650?hl=en" target="_blank" rel="noreferrer">Google Ads</a>. Specific inventory / partner agreements may differ.</div>
+<div class="callout" style="margin-top:22px">Partner value: less manual repackaging, fewer avoidable rejections, and faster iteration across networks.</div>
+</section>
+
+<section class="slide-cut" hidden data-chapter="Export" data-short="QA checklist">
+<div class="kicker">Export best practices <em>/ Interactive preflight</em></div><h2>Before handoff, <span class="accent">prove it works.</span></h2><p class="lead" style="font-size:19px">An example preflight checklist. Check items while presenting to demonstrate what “export ready” actually means.</p>
+<div class="qaGrid" id="qaGrid"><label class="qaItem"><input type="checkbox"/><span><strong><span class="emo">📦</span>Package / size</strong><small>Fits current network rules; all required assets are included.</small></span></label><label class="qaItem"><input type="checkbox"/><span><strong><span class="emo">🚀</span>First launch</strong><small>No blank screens, broken loading or unexpected network dependencies.</small></span></label><label class="qaItem"><input type="checkbox"/><span><strong><span class="emo">👆</span>Interaction</strong><small>Touch targets, gesture handling, instruction and first action.</small></span></label><label class="qaItem"><input type="checkbox"/><span><strong><span class="emo">📱</span>Portrait + landscape</strong><small>Responsive layout, safe areas and no cropped CTA/UI.</small></span></label><label class="qaItem"><input type="checkbox"/><span><strong><span class="emo">🔊</span>Sound + visibility</strong><small>Audio permission, mute behavior and pause/resume states.</small></span></label><label class="qaItem"><input type="checkbox"/><span><strong><span class="emo">🔗</span>MRAID + CTA</strong><small>Correct lifecycle, destination and user-initiated store open.</small></span></label><label class="qaItem"><input type="checkbox"/><span><strong><span class="emo">⚡</span>Performance</strong><small>Load, frame pacing, asset cost and WebGL fallback where required.</small></span></label><label class="qaItem"><input type="checkbox"/><span><strong><span class="emo">🔍</span>Device preview</strong><small>Realistic mobile/browser testing before sign-off.</small></span></label></div>
+<div class="qaSummary"><strong id="qaCount">0 / 8</strong><div class="summarybar"><i id="qaBar"></i></div><button class="utility" id="resetQa">Reset checklist</button></div>
+</section>
+
+<section class="slide" data-chapter="Proof" data-short="Showcase footage">
+<div class="kicker">Partner-ready examples <em>/ Our best work</em></div><h2>Two clips. <span class="accent">Two things to prove.</span></h2><p class="lead" style="font-size:18px">Keep examples short. Narrate the decision and why it mattered, not only what happens on screen.</p>
+<div class="gallery"><div class="galleryCard"><div class="mediaSlot" data-media="best_hook" data-default="media/best_hook.mp4?v=2"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">24PLAY</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div class="galleryCaption"><h3><span class="emo">🥇</span>01 / Best hook</h3><p>Score goals to win the girl's attention. The player gets an emotional reason to play in the first seconds.</p><div class="checkList"><div class="checkRow"><i>✓</i> Emotional stake up front</div><div class="checkRow"><i>✓</i> One clear action: shoot</div><div class="checkRow"><i>✓</i> Instant reward with hearts</div></div></div></div><div class="galleryCard"><div class="mediaSlot" data-media="best_visual" data-default="media/best_visual.mp4?v=4"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">24PLAY</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div class="galleryCaption"><h3><span class="emo">💎</span>02 / Best visual</h3><p>A hard choice in the last shot: who do you take out? Cinematic scope, readable options and a big payoff.</p><div class="checkList"><div class="checkRow"><i>✓</i> Cinematic camera and scope</div><div class="checkRow"><i>✓</i> Readable choice under pressure</div><div class="checkRow"><i>✓</i> Satisfying success moment</div></div></div></div></div>
+</section>
+
+<section class="slide" data-chapter="Proof" data-short="8 Ball Pool">
+<div class="kicker">Proof <em>/ Results</em></div><h2>326M impressions. <span class="accent">One simple shot.</span></h2>
+<div class="poolLayout"><div class="poolVid"><div class="mediaSlot" data-media="proof_pool" data-default="media/proof_pool.mp4"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">🎱 8 BALL POOL</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><div class="mediaSlot" data-media="pool_wwe" data-default="media/pool_wwe.mp4"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">🤼 WWE COLLAB</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div></div><div class="poolSide"><div class="statBig"><span class="emo">🎱</span><strong>326M</strong><small>impressions on our 8 Ball Pool playable</small></div><div class="checkList"><div class="checkRow"><i>✓</i> A game everyone already knows</div><div class="checkRow"><i>✓</i> Aim, pull, shoot: clear in one second</div><div class="checkRow"><i>✓</i> Real ball physics and a satisfying pot</div><div class="checkRow"><i>✓</i> Brand collabs like WWE on the same core</div></div></div></div>
+</section>
+
+<section class="slide" data-chapter="Proof" data-short="Proof at scale">
+<div class="kicker">Proof <em>/ Results</em></div><h2>735M impressions. <span class="accent">Then we levelled it up.</span></h2>
+<div class="proofLayout"><div class="proofRow"><div class="proofStep"><div class="mediaSlot" data-media="drone_original" data-default="media/drone_original.mp4"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">ORIGINAL · 735M</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><p><b>The hit</b> 735M impressions</p></div><div class="proofArrow">→</div><div class="proofStep"><div class="mediaSlot" data-media="drone_v2" data-default="media/drone_v2.mp4"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">LEVEL UP</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><p><b>New visual</b> same core loop</p></div><div class="proofArrow">→</div><div class="proofStep"><div class="mediaSlot" data-media="drone_v3" data-default="media/drone_v3.mp4"><video controls muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">LEVEL UP</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div><p><b>New feel</b> same core loop</p></div></div><div class="proofStats"><div class="statBig"><span class="emo">🚁</span><strong>735M</strong><small>impressions on one War Drone playable</small></div><p class="proofNote">After the hit we kept the mechanic and only upgraded the visual and game feel, so each version still feels new.</p></div></div>
+</section>
+
+<section class="slide" data-chapter="Proof" data-short="Our range">
+<div class="kicker">Proof <em>/ Range</em></div><h2>One team. <span class="accent">Every genre.</span></h2><p class="lead" style="font-size:18px">Shooters, sports and casual classics, all made with the same process and the same quality bar.</p>
+<div class="wallRow"><div class="wallGrid"><div class="wallItem"><div class="mediaSlot" data-media="wall_tank" data-default="media/wall_tank.mp4"><video muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">🎯 Pure Sniper</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div></div><div class="wallItem"><div class="mediaSlot" data-media="wall_drone" data-default="media/wall_drone.mp4"><video muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">🚁 War Drone</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div></div><div class="wallItem"><div class="mediaSlot" data-media="wall_golf" data-default="media/wall_golf.mp4"><video muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">⛳ Carrom Pool</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div></div><div class="wallItem"><div class="mediaSlot" data-media="wall_pool" data-default="media/our_pool.mp4"><video muted loop playsinline></video><div class="placeholder"><div class="playCircle">▶</div><span>ADD CLIP</span><small>Drop MP4 / WEBM here</small></div><div class="slotTag us">🎱 8 Ball Pool</div><div class="uploadBadge">CHANGE CLIP</div><input type="file" accept="video/mp4,video/webm,video/quicktime"/></div></div></div><div class="wallSide"><div class="chip">MINICLIP PORTFOLIO</div><h3><span class="emo">🤝</span>Titles we build for</h3><div class="checkList"><div class="checkRow"><i>✓</i> 🎯 Pure Sniper</div><div class="checkRow"><i>✓</i> 🚁 War Drone</div><div class="checkRow"><i>✓</i> ⛳ Carrom Pool</div><div class="checkRow"><i>✓</i> 🎱 8 Ball Pool, incl. WWE collab</div></div><p>Same process, same quality bar, every genre.</p></div></div>
+</section>
+
+<section class="slide" data-chapter="Closing" data-short="Partner takeaway">
+<div class="kicker">The partnership promise</div><div class="closeTitle" style="margin-top:60px;font-size:118px">From the brief<br/>to a <span class="accent">better playable.</span></div>
+<div class="closeBottom"><span class="pill"><span class="emo">📋</span>BRIEF-LED</span><span class="pill"><span class="emo">🔬</span>EVIDENCE-INFORMED</span><span class="pill"><span class="emo">🔁</span>ITERATIVE</span><span class="pill"><span class="emo">🚀</span>PLATFORM-READY</span></div>
+</section>
+
+<div class="bottom"><span class="slideNumber" id="slideNo">01 / 16</span><div class="progress"><i id="bar"></i></div><button class="utility" id="outlineBtn" title="Open slide overview (O)">Slides <span style="color:var(--lime)">↗</span></button><button class="navbtn" id="prev" aria-label="Previous slide">←</button><button class="navbtn" id="next" aria-label="Next slide">→</button><button class="utility" id="fullBtn" title="Toggle fullscreen (F)">⛶</button></div><div class="help">← → / SPACE · NAVIGATE &nbsp; O · OVERVIEW &nbsp; F · FULLSCREEN</div>
+<div class="outlineOverlay" id="outline"><div class="outHeader"><h2>Presentation overview <span style="color:var(--lime)">/ 16</span></h2><button class="utility" id="outlineClose">Close ✕</button></div><div class="outlineGrid" id="outlineGrid"></div></div>
+</main>
+<script>
+// Load slide videos only while their slide is open (Chrome limits simultaneous players)
+function rollNums(sl){sl.querySelectorAll('.topCap strong').forEach((el,i)=>{const v=el.dataset.v||(el.dataset.v=el.textContent.trim());el.innerHTML='';el.classList.remove('rolled');const stops=[];let di=0;[...v].forEach(ch=>{if(/\d/.test(ch)){const cyc=2+i+di,reel=document.createElement('span'),strip=document.createElement('span');reel.className='reel';strip.className='strip';let h='';for(let c=0;c<cyc;c++)for(let d=0;d<10;d++)h+='<i>'+((d+di*3)%10)+'</i>';h+='<i>'+ch+'</i>';strip.innerHTML=h;reel.appendChild(strip);el.appendChild(reel);stops.push([strip,cyc*10,1.1+i*.45+di*.12]);di++}else{const t=document.createElement('span');t.className='rsuf';t.textContent=ch;el.appendChild(t)}});const last=Math.max(...stops.map(s=>s[2]));requestAnimationFrame(()=>requestAnimationFrame(()=>{stops.forEach(([st,n,dur])=>{st.style.transition='transform '+dur+'s cubic-bezier(.18,.85,.25,1.04) .35s';st.style.transform='translateY(-'+n*1.08+'em)'})}));clearTimeout(el._rt);el._rt=setTimeout(()=>el.classList.add('rolled'),(last+.35)*1000)})}
+function mediaOn(sl){rollNums(sl);sl.querySelectorAll('.mediaSlot video').forEach(v=>{if(v.dataset.src&&!v.getAttribute('src'))v.src=v.dataset.src;if(v.getAttribute('src')){v.pause();try{v.currentTime=0}catch(e){}clearTimeout(v._pt);v._pt=setTimeout(()=>{if(sl.classList.contains('active')){try{v.currentTime=0}catch(e){}v.play().catch(()=>{})}},950)}})}
+function mediaOff(sl){sl.querySelectorAll('.mediaSlot video').forEach(v=>{clearTimeout(v._pt);v.pause();if(v.dataset.src&&!v.closest('.mediaSlot').dataset.tempUrl){v.removeAttribute('src');v.load()}})}
+(()=>{
+ const slides=[...document.querySelectorAll('.slide')];let current=0;const byId=id=>document.getElementById(id);const outline=byId('outline');
+ const stage=byId('stage');let S=1;
+ function resize(){S=Math.min(innerWidth/1440,innerHeight/810)*.985;document.documentElement.style.setProperty('--s',String(S))}addEventListener('resize',resize);resize();
+ const replay=(el,c)=>{el.classList.remove(c);void el.offsetWidth;el.classList.add(c)};
+ // --- motion setup: split headlines into words, stagger content reveals, ambient glows
+ const RV='.expCaption,.expCard,.expTable tr,.topItem,.shot,.shipItem,.nextCard,.shipCard,.wallSide,.bpCard,.statBig,.askCard,.poolVid,.trioCard,.proofStep,.proofArrow,.statBig,.proofNote,.wallItem,.lead,.lede,.micro span,.heroGraphic .node,.bigMark,.flowBlock,.panel,.noteStrip,.filter,.beat,.slide>.tiny,.hook,.mediaCard,.checkRow,.ladder .aside,.level,.verticalArrow,.ctaPhone,.callout,.feedNode,.log,.paperRow,.suggested,.matrix>div,.matrix li,.toolCard,.pipeItem,.specTable tr,.sourceFoot,.qaItem,.qaSummary,.galleryCard,.pill,.clarityPhone,.cMark,.cRow,.testCard,.feel,.procStep,.procArrow,.kickoff,.kP,.kItem,.lvCard,.lvArrow,.lever';
+ const variant=el=>el.matches('.filter,.specTable tr,.matrix li,.checkRow,.feedNode,.paperRow,.kItem')?'rv-left':el.matches('.heroGraphic .node,.bigMark,.micro span,.pill,.suggested,.cMark,.kP,.procArrow')?'rv-pop':el.matches('.log')?'rv-drop':el.matches('.proofArrow,.wallItem')?'rv-pop':'rv-up';
+ function splitWords(el,wi){const walk=n=>[...n.childNodes].forEach(c=>{if(c.nodeType===3){const f=document.createDocumentFragment();c.textContent.split(/(\s+)/).forEach(p=>{if(!p)return;if(/^\s+$/.test(p))f.append(p);else{const w=document.createElement('span');w.className='w';w.textContent=p;w.style.setProperty('--wi',wi++);f.append(w)}});c.replaceWith(f)}else if(c.nodeType===1&&c.tagName!=='BR')walk(c)});walk(el);return wi}
+ slides.forEach(slide=>{
+  ['g2','g1'].forEach(g=>{const d=document.createElement('div');d.className='fx-glow '+g;d.setAttribute('aria-hidden','true');slide.prepend(d)});
+  const k=slide.querySelector('.kicker');if(k){k.classList.add('rv','rv-up');k.style.setProperty('--d','.05s')}
+  let words=0;slide.querySelectorAll('h1,h2,.closeTitle').forEach(h=>{words=splitWords(h,words)});
+  const base=.2+Math.min(words,14)*.048;
+  slide.querySelectorAll(RV).forEach((el,n)=>{el.classList.add('rv',variant(el));el.style.setProperty('--d',Math.min(base+n*.065,2).toFixed(3)+'s')});
+ });
+ document.querySelectorAll('.toolCard .iconBox').forEach(b=>{b.innerHTML='<span class="ic">'+b.innerHTML+'</span>'});
+ // --- cursor parallax + card spotlight
+ const SPOT='.panel,.flowBlock,.beat,.hook,.toolCard,.pipeItem,.mediaCard,.galleryCard,.matrix>div,.ladder .aside,.filter,.qaItem,.feedNode';let raf=0,pe=null;
+ stage.addEventListener('pointermove',e=>{pe=e;if(raf)return;raf=requestAnimationFrame(()=>{raf=0;const r=stage.getBoundingClientRect();stage.style.setProperty('--px',((pe.clientX-r.left)/r.width*2-1).toFixed(3));stage.style.setProperty('--py',((pe.clientY-r.top)/r.height*2-1).toFixed(3));const c=pe.target.closest?.(SPOT);if(c){const b=c.getBoundingClientRect();c.style.setProperty('--mx',((pe.clientX-b.left)/S).toFixed(1)+'px');c.style.setProperty('--my',((pe.clientY-b.top)/S).toFixed(1)+'px')}})});
+ stage.addEventListener('pointerleave',()=>{stage.style.setProperty('--px','0');stage.style.setProperty('--py','0')});
+ function goto(i){if(i<0||i>=slides.length)return;const next=slides[i];
+  if(i!==current){const prev=slides[current];stage.dataset.dir=i>current?'fwd':'back';prev.classList.remove('active');prev.classList.add('leaving');clearTimeout(prev._lt);prev._lt=setTimeout(()=>prev.classList.remove('leaving'),560);mediaOff(prev);mediaOn(slides[i]);replay(byId('slideNo'),'tick');replay(byId('chapter'),'swap')}
+  clearTimeout(next._lt);next.classList.remove('leaving');current=i;next.classList.add('active');byId('slideNo').textContent=String(i+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');byId('bar').style.width=((i+1)/slides.length*100)+'%';byId('chapter').textContent=slides[i].dataset.chapter.toUpperCase()+' / '+slides[i].dataset.short.toUpperCase();document.querySelectorAll('.outlineItem').forEach((x,j)=>x.classList.toggle('current',i===j));try{history.replaceState(null,'','#'+(i+1))}catch(e){} }
+ byId('next').onclick=()=>goto(current+1);byId('prev').onclick=()=>goto(current-1);byId('outlineBtn').onclick=()=>outline.classList.add('open');byId('outlineClose').onclick=()=>outline.classList.remove('open');byId('fullBtn').onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen?.();
+ slides.forEach((slide,i)=>{const btn=document.createElement('button');btn.className='outlineItem';btn.style.setProperty('--i',i);btn.innerHTML='<b>'+String(i+1).padStart(2,'0')+'</b><span>'+slide.dataset.short+'</span>';btn.onclick=()=>{outline.classList.remove('open');goto(i)};byId('outlineGrid').append(btn)});
+ addEventListener('keydown',e=>{const tag=(e.target?.tagName||'').toLowerCase();if(['input','textarea','select'].includes(tag))return;if(e.key==='o'||e.key==='O'){outline.classList.toggle('open');return}if(e.key==='Escape'){outline.classList.remove('open');return}if(e.key==='f'||e.key==='F'){byId('fullBtn').click();return}if(outline.classList.contains('open'))return;if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();goto(current+1)}if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();goto(current-1)}if(e.key==='Home')goto(0);if(e.key==='End')goto(slides.length-1)});
+ let startX=0;byId('stage').addEventListener('touchstart',e=>{startX=e.touches[0].clientX},{passive:true});byId('stage').addEventListener('touchend',e=>{if(e.target.closest('.mediaSlot'))return;const dx=e.changedTouches[0].clientX-startX;if(Math.abs(dx)>80)goto(current+(dx<0?1:-1))},{passive:true});
+ document.querySelectorAll('.mediaSlot').forEach(slot=>{let video=slot.querySelector('video'),input=slot.querySelector('input');const setFile=file=>{if(!file||!file.type.startsWith('video/'))return;const url=URL.createObjectURL(file);if(slot.dataset.tempUrl)URL.revokeObjectURL(slot.dataset.tempUrl);slot.dataset.tempUrl=url;video.src=url;slot.classList.add('hasVideo');video.load();video.play().catch(()=>{})};slot.addEventListener('click',e=>{if(e.target.closest('video'))return;input.click()});input.addEventListener('change',()=>setFile(input.files[0]));slot.addEventListener('dragover',e=>{e.preventDefault();slot.classList.add('drag')});slot.addEventListener('dragleave',()=>slot.classList.remove('drag'));slot.addEventListener('drop',e=>{e.preventDefault();slot.classList.remove('drag');setFile(e.dataTransfer.files[0])});const defaultSrc=slot.dataset.default; if(defaultSrc){video.addEventListener('loadeddata',()=>slot.classList.add('hasVideo'));video.addEventListener('error',()=>{if(!slot.dataset.tempUrl)slot.classList.remove('hasVideo')});video.dataset.src=defaultSrc}});
+ let qaPrev=0;function updateQa(){let list=[...document.querySelectorAll('#qaGrid input')],n=list.filter(x=>x.checked).length;byId('qaCount').textContent=n+' / '+list.length;byId('qaBar').style.width=100*n/list.length+'%';if(n!==qaPrev)replay(byId('qaCount'),'bump');if(n===list.length&&qaPrev<n)celebrate();qaPrev=n}
+ function celebrate(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cols=['#caff6a','#ff987c','#a8a0ff','#7ce0d7','#f5f7f1'];for(let k=0;k<110;k++){const p=document.createElement('i');p.className='confetti';p.style.background=cols[k%cols.length];p.style.left=(720+(Math.random()-.5)*160)+'px';p.style.top='620px';stage.append(p);const dx=(Math.random()-.5)*1300,dy=-(260+Math.random()*420),r=(Math.random()-.5)*900;p.animate([{transform:'translate(0,0) rotate(0deg)',opacity:1},{transform:`translate(${dx*.8}px,${dy}px) rotate(${r*.6}deg)`,opacity:1,offset:.45},{transform:`translate(${dx}px,${dy+560}px) rotate(${r}deg)`,opacity:0}],{duration:1800+Math.random()*900,easing:'cubic-bezier(.2,.6,.35,1)',delay:Math.random()*120,fill:'backwards'}).onfinish=()=>p.remove()}const t=document.createElement('div');t.className='readyToast';t.textContent='Export ready 🚀';stage.append(t);setTimeout(()=>t.remove(),2500)}document.querySelectorAll('#qaGrid input').forEach(el=>el.addEventListener('change',updateQa));byId('resetQa').onclick=()=>{document.querySelectorAll('#qaGrid input').forEach(x=>x.checked=false);updateQa()};
+ const hash=parseInt(location.hash.slice(1));const start=Number.isFinite(hash)?Math.max(0,Math.min(slides.length-1,hash-1)):0;if(start!==current){slides[current].classList.remove('active');current=start}goto(start);mediaOn(slides[start]);
+})();
+
+// Platform tour: click a screenshot to zoom
+(()=>{const st=document.getElementById('stage');if(!st)return;const z=document.createElement('div');z.className='shotZoom';z.innerHTML='<img alt=""/>';st.appendChild(z);
+document.querySelectorAll('.shot').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();z.querySelector('img').src=b.dataset.src;z.classList.add('open')}));
+z.addEventListener('click',e=>{e.stopPropagation();z.classList.remove('open')});
+document.addEventListener('keydown',e=>{if(z.classList.contains('open')&&(e.key==='Escape'||e.key.startsWith('Arrow')||e.key===' ')){z.classList.remove('open')}},true)})();
+</script></body></html>
